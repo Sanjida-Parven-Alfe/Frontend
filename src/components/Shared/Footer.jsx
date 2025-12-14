@@ -8,7 +8,7 @@ const Footer = () => {
       
       <div className='absolute -top-10 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none opacity-[0.03]'>
         <h1 className='text-[200px] font-bold text-white leading-none whitespace-nowrap'>
-          GRANDSCAPE
+          STYLE DECOR
         </h1>
       </div>
 
@@ -42,7 +42,7 @@ const Footer = () => {
           <div className='lg:col-span-3 space-y-6'>
             <div className='text-3xl font-bold flex items-center gap-2'>
                <img src={logo} alt="Logo" className="w-12 h-12 object-contain" />
-              <span className='text-white'>Grandscape</span>
+              <span className='text-white'>StyleDecor</span>
             </div>
             <p className='text-gray-500 leading-relaxed max-w-sm text-sm'>
               Elevating events and interiors with a touch of modern luxury. We design moments that last a lifetime.
@@ -116,14 +116,14 @@ const Footer = () => {
               </li>
               <li className='flex items-center gap-3'>
                 <span className='text-teal-400'>✉️</span>
-                <span>hello@grandscape.com</span>
+                <span>hello@StyleDecor.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className='border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm'>
-          <p>&copy; 2025 Grandscape. All rights reserved.</p>
+          <p>&copy; 2025 StyleDecor. All rights reserved.</p>
           <div className='flex gap-6 mt-4 md:mt-0'>
             <a className='hover:text-white cursor-pointer transition-colors'>Terms</a>
             <a className='hover:text-white cursor-pointer transition-colors'>Cookies</a>

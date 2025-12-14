@@ -112,9 +112,9 @@ const Navbar = () => {
         
         {/* Logo Section */}
         <Link to='/' className='flex items-center gap-2'>
-            <img src={logo} alt="Grandscape" className="w-10 h-10 md:w-10 md:h-10 object-contain" />
+            <img src={logo} alt="StyleDecor" className="w-10 h-10 md:w-10 md:h-10 object-contain" />
             <span className='text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
-            Grandscape
+            StyleDecor
           </span>
         </Link>
       </div>
