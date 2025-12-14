@@ -98,7 +98,7 @@ const Login = () => {
               <input
                 type="email"
                 placeholder="mail@example.com"
-                className={`input input-bordered w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg ${errors.email ? 'input-error bg-red-900/10' : ''}`}
+                className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg ${errors.email ? 'input-error bg-red-900/10' : ''}`}
                 {...register('email', { required: 'Email is required' })}
               />
               {errors.email && (
@@ -121,7 +121,7 @@ const Login = () => {
                 <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className={`input input-bordered w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 ${errors.password ? 'input-error bg-red-900/10' : ''}`}
+                    className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 ${errors.password ? 'input-error bg-red-900/10' : ''}`}
                     {...register('password', { 
                         required: 'Password is required',
                         minLength: { value: 6, message: 'Password must be at least 6 characters' }
