@@ -83,6 +83,7 @@ const Navbar = () => {
     <div className='navbar fixed z-10 bg-gray-900/95 backdrop-blur-md shadow-md px-4 lg:px-20 text-white'>
       
       <div className='navbar-start'>
+
         {/* Mobile Dropdown */}
         <div className='dropdown'>
           <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden pl-0'>
@@ -110,7 +111,8 @@ const Navbar = () => {
           </ul>
         </div>
         
-        {/* Logo Section */}
+        {/* Logo */}
+        
         <Link to='/' className='flex items-center gap-2'>
             <img src={logo} alt="StyleDecor" className="w-10 h-10 md:w-10 md:h-10 object-contain" />
             <span className='text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
