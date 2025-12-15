@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <div className='text-center text-3xl font-bold mt-20'>Welcome to Grandscape!</div>,
+        element: <div className='text-center text-3xl font-bold mt-20'>Welcome to StyleDecor!</div>,
       },
       {
         path: '/services',
