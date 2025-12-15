@@ -27,7 +27,6 @@ const SignUp = () => {
 
     <div className='flex h-screen bg-[#0f172a] font-sans -mt-24 overflow-hidden'>
       
-
       <div
         className='hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-cover bg-center relative'
         style={{
@@ -42,7 +41,6 @@ const SignUp = () => {
           </p>
         </div>
       </div>
-
   
       <div 
         className='w-full lg:w-1/2 h-full flex items-center justify-center p-6 lg:p-12 relative z-0 overflow-y-auto'
@@ -77,17 +75,14 @@ const SignUp = () => {
              <span>Sign up with Google</span>
           </button>
 
-       
           <div className="relative flex items-center mb-4">
             <div className="flex-grow border-t border-gray-700"></div>
             <span className="flex-shrink-0 mx-3 text-gray-500 text-xs font-medium">OR</span>
             <div className="flex-grow border-t border-gray-700"></div>
           </div>
 
-
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4'>
-            
-          
+                   
             <div className="form-control w-full">
               <label className="label pb-1">
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Full Name</span>
@@ -102,8 +97,7 @@ const SignUp = () => {
                 <span className='text-red-400 text-xs mt-1'>{errors.name.message}</span>
               )}
             </div>
-
-         
+       
             <div className="form-control w-full">
               <label className="label pb-1">
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Email Address</span>
@@ -118,8 +112,7 @@ const SignUp = () => {
                 <span className='text-red-400 text-xs mt-1'>{errors.email.message}</span>
               )}
             </div>
-
-           
+     
             <div className="form-control w-full md:col-span-2">
                 <label className="label pb-1">
                     <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Profile Photo</span>
@@ -134,8 +127,7 @@ const SignUp = () => {
                     <span className='text-red-400 text-xs mt-1'>{errors.photo.message}</span>
                   )}
             </div>
-
-          
+        
             <div className="form-control w-full md:col-span-2">
               <label className="label pb-1">
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Password</span>
@@ -163,7 +155,6 @@ const SignUp = () => {
                 <span className='text-red-400 text-xs mt-1'>{errors.password.message}</span>
               )}
             </div>
-
             
             <div className="pt-2 md:col-span-2">
               <button 
@@ -174,8 +165,7 @@ const SignUp = () => {
               </button>
             </div>
           </form>
-
-         
+   
           <p className='text-center text-sm text-gray-400 mt-4'>
             Already have an account?{' '}
             <Link
