@@ -72,7 +72,6 @@ const Login = () => {
             </p>
           </div>
 
-
           <button 
             onClick={handleGoogleLogin} 
             className="btn btn-outline w-full h-12 border-gray-600 hover:bg-white hover:text-black text-white font-medium normal-case flex items-center justify-center gap-3 transition-all duration-200 rounded-lg mb-4"
@@ -81,13 +80,11 @@ const Login = () => {
              <span>Sign in with Google</span>
           </button>
 
-
           <div className="relative flex items-center mb-6">
             <div className="flex-grow border-t border-gray-700"></div>
             <span className="flex-shrink-0 mx-4 text-gray-500 text-sm font-medium">OR</span>
             <div className="flex-grow border-t border-gray-700"></div>
           </div>
-
 
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
 
@@ -106,7 +103,6 @@ const Login = () => {
               )}
             </div>
 
-  
             <div className="form-control w-full">
               <div className="flex justify-between items-center pb-1.5">
                   <label className="label p-0">
@@ -140,7 +136,6 @@ const Login = () => {
               )}
             </div>
 
-
             <div className="pt-2">
               <button 
                 type='submit' 
@@ -151,7 +146,6 @@ const Login = () => {
             </div>
           </form>
 
-        
           <p className='text-center text-sm text-gray-400 mt-6'>
             Don't have an account?{' '}
             <Link
