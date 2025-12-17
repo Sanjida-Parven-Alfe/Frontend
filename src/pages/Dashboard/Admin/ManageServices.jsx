@@ -2,7 +2,6 @@ import React from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const ManageServices = () => {
-    // ডামি ডাটা (পরে সার্ভার থেকে ফেচ করবেন)
     const services = [
         { _id: 1, name: "Royal Wedding Stage", category: "Wedding", price: 1200, unit: "per event" },
         { _id: 2, name: "Corporate Office Decor", category: "Office", price: 50, unit: "per sq-ft" },
