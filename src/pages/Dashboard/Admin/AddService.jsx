@@ -8,12 +8,11 @@ const AddService = () => {
     const { user } = useContext(AuthContext);
 
     const onSubmit = data => {
-        // TODO: Image Hosting API (ImgBB) তে ছবি আপলোড করতে হবে
-        // তারপর ডাটাবেসে পাঠাতে হবে
+
         const newService = {
             service_name: data.name,
             cost: parseFloat(data.cost),
-            unit: data.unit, // per sqrt-ft, per floor etc
+            unit: data.unit, 
             category: data.category,
             description: data.description,
             createdByEmail: user?.email,
