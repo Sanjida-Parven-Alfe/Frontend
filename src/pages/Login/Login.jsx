@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import logo from '../../assets/image/logo.png'
 import { AuthContext } from '../../providers/AuthProvider'
 
 const Login = () => {
-  const { signIn, googleSignIn } = useContext(AuthContext);
+  const { signIn, googleSignIn } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -20,33 +21,26 @@ const Login = () => {
   } = useForm()
 
   const onSubmit = (data) => {
-
     signIn(data.email, data.password)
         .then(result => {
-            const user = result.user;
-            console.log(user);
-      
-            navigate(from, { replace: true });
+            navigate(from, { replace: true })
         })
         .catch(error => {
-            console.error(error);
-        
-            alert("Login Failed: " + error.message);
+            console.error(error)
+            alert("Login Failed: " + error.message)
         })
   }
 
   const handleGoogleLogin = () => {
      googleSignIn()
        .then(result => {
-          console.log(result.user);
-          navigate(from, { replace: true });
+          navigate(from, { replace: true })
        })
        .catch(error => console.error(error))
   }
 
   return (
     <div className='flex min-h-screen bg-[#0f172a] font-sans -mt-24'>
-      {/* Left Side */}
       <div
         className='hidden lg:flex lg:w-1/2 items-center justify-center bg-cover bg-center relative'
         style={{
@@ -62,7 +56,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right Side */}
       <div 
         className='w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 relative z-0'
         style={{
@@ -85,7 +78,7 @@ const Login = () => {
             onClick={handleGoogleLogin} 
             className="btn btn-outline w-full h-12 border-gray-600 hover:bg-white hover:text-black text-white font-medium normal-case flex items-center justify-center gap-3 transition-all duration-200 rounded-lg mb-4"
           >
-             <FaGoogle className="text-red-500 text-xl" />
+             <FcGoogle className="text-2xl" />
              <span>Sign in with Google</span>
           </button>
 
