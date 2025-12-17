@@ -2,7 +2,6 @@ import React from 'react';
 import { FaTrashAlt, FaUserTie } from 'react-icons/fa';
 
 const AllUsers = () => {
-    // ডামি ইউজার ডাটা (পরে useQuery দিয়ে লোড করবেন)
     const users = [
         { _id: 1, name: "Rahim", email: "rahim@mail.com", role: "user" },
         { _id: 2, name: "Karim", email: "karim@mail.com", role: "admin" },
@@ -10,7 +9,7 @@ const AllUsers = () => {
     ];
 
     const handleMakeDecorator = (user) => {
-        // TODO: API call to update user role to 'decorator'
+
         console.log(`Make ${user.name} a decorator`);
         alert(`${user.name} is now a Decorator!`);
     }
