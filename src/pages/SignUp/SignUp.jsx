@@ -1,32 +1,77 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa'
 import logo from '../../assets/image/logo.png'
+import axios from 'axios'
+import { AuthContext } from '../../providers/AuthProvider'
+
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY || "আপনার_IMAGEBB_KEY_এখানে_দিন";
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const SignUp = () => {
+  const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log('SignUp Data:', data)
-   
+  const onSubmit = async (data) => {
+
+    const imageFile = { image: data.photo[0] }
+    try {
+        const res = await axios.post(image_hosting_api, imageFile, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        });
+
+        if (res.data.success) {
+            const photoURL = res.data.data.display_url;
+            
+           
+            createUser(data.email, data.password)
+                .then(result => {
+                    const loggedUser = result.user;
+                    console.log(loggedUser);
+
+                    updateUserProfile(data.name, photoURL)
+                        .then(() => {
+                            console.log('User profile updated');
+                            reset();
+                      
+                            navigate('/');
+                        })
+                        .catch(error => console.log(error))
+                })
+                .catch(error => {
+                    console.error(error);
+          
+                })
+        }
+    } catch (error) {
+        console.error("Image Upload Failed or Sign Up Error", error);
+    }
   }
 
   const handleGoogleSignIn = () => {
-     console.log('Google Sign In Clicked');
+    googleSignIn()
+    .then(result =>{
+        console.log(result.user);
+        navigate('/');
+    })
+    .catch(error => console.error(error))
   }
 
   return (
-
     <div className='flex h-screen bg-[#0f172a] font-sans -mt-24 overflow-hidden'>
-      
+      {/* Left Side */}
       <div
         className='hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-cover bg-center relative'
         style={{
@@ -42,6 +87,7 @@ const SignUp = () => {
         </div>
       </div>
   
+      {/* Right Side */}
       <div 
         className='w-full lg:w-1/2 h-full flex items-center justify-center p-6 lg:p-12 relative z-0 overflow-y-auto'
         style={{
@@ -54,17 +100,10 @@ const SignUp = () => {
         }}
       >
         <div className='w-full max-w-[500px] mt-16 lg:mt-0'> 
-          
-       
           <div className='text-center mb-4'>
             <img src={logo} alt="StyleDecor" className="lg:hidden mx-auto h-10 w-auto mb-3 brightness-0 invert" />
-            
-            <h2 className='text-2xl md:text-3xl font-bold text-white'>
-              Create Account
-            </h2>
-            <p className='mt-1 text-gray-400 text-sm'>
-              Join us today! Please enter your details.
-            </p>
+            <h2 className='text-2xl md:text-3xl font-bold text-white'>Create Account</h2>
+            <p className='mt-1 text-gray-400 text-sm'>Join us today! Please enter your details.</p>
           </div>
 
           <button 
@@ -82,50 +121,28 @@ const SignUp = () => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4'>
-                   
             <div className="form-control w-full">
               <label className="label pb-1">
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Full Name</span>
               </label>
-              <input
-                type="text"
-                placeholder="John Doe"
-                className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg text-sm ${errors.name ? 'input-error bg-red-900/10' : ''}`}
-                {...register('name', { required: 'Name is required' })}
-              />
-              {errors.name && (
-                <span className='text-red-400 text-xs mt-1'>{errors.name.message}</span>
-              )}
+              <input type="text" placeholder="John Doe" className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg text-sm ${errors.name ? 'input-error bg-red-900/10' : ''}`} {...register('name', { required: 'Name is required' })} />
+              {errors.name && <span className='text-red-400 text-xs mt-1'>{errors.name.message}</span>}
             </div>
        
             <div className="form-control w-full">
               <label className="label pb-1">
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Email Address</span>
               </label>
-              <input
-                type="email"
-                placeholder="mail@example.com"
-                className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg text-sm ${errors.email ? 'input-error bg-red-900/10' : ''}`}
-                {...register('email', { required: 'Email is required' })}
-              />
-              {errors.email && (
-                <span className='text-red-400 text-xs mt-1'>{errors.email.message}</span>
-              )}
+              <input type="email" placeholder="mail@example.com" className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg text-sm ${errors.email ? 'input-error bg-red-900/10' : ''}`} {...register('email', { required: 'Email is required' })} />
+              {errors.email && <span className='text-red-400 text-xs mt-1'>{errors.email.message}</span>}
             </div>
      
             <div className="form-control w-full md:col-span-2">
                 <label className="label pb-1">
                     <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Profile Photo</span>
                 </label>
-           
-                <input 
-                    type="file" 
-                    className={`file-input file-input-bordered w-full h-11 min-h-[44px] bg-white/5 border-white/10 text-white file:bg-teal-400 file:text-black file:border-none file:font-semibold hover:file:bg-teal-500 text-sm ${errors.photo ? 'border-red-500' : ''}`}
-                    {...register('photo', { required: 'Profile photo is required' })}
-                />
-                 {errors.photo && (
-                    <span className='text-red-400 text-xs mt-1'>{errors.photo.message}</span>
-                  )}
+                <input type="file" className={`file-input file-input-bordered w-full h-11 min-h-[44px] bg-white/5 border-white/10 text-white file:bg-teal-400 file:text-black file:border-none file:font-semibold hover:file:bg-teal-500 text-sm ${errors.photo ? 'border-red-500' : ''}`} {...register('photo', { required: 'Profile photo is required' })} />
+                 {errors.photo && <span className='text-red-400 text-xs mt-1'>{errors.photo.message}</span>}
             </div>
         
             <div className="form-control w-full md:col-span-2">
@@ -133,47 +150,20 @@ const SignUp = () => {
                 <span className="label-text font-semibold text-gray-300 text-xs md:text-sm">Password</span>
               </label>
               <div className="relative">
-                <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
-                    className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 text-sm ${errors.password ? 'input-error bg-red-900/10' : ''}`}
-                    {...register('password', { 
-                        required: 'Password is required',
-                        minLength: { value: 6, message: 'Password 6+ chars' }
-                        
-                    })}
-                />
-                <button 
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer"
-                >
-                    {showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}
-                </button>
+                <input type={showPassword ? "text" : "password"} placeholder="Create a password" className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 text-sm ${errors.password ? 'input-error bg-red-900/10' : ''}`} {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password 6+ chars' } })} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}</button>
               </div>
-              {errors.password && (
-                <span className='text-red-400 text-xs mt-1'>{errors.password.message}</span>
-              )}
+              {errors.password && <span className='text-red-400 text-xs mt-1'>{errors.password.message}</span>}
             </div>
             
             <div className="pt-2 md:col-span-2">
-              <button 
-                type='submit' 
-                className='btn w-full h-12 bg-teal-400 hover:bg-teal-500 text-black font-bold text-lg rounded-lg border-none normal-case shadow-lg shadow-teal-500/20 transition-all duration-300'
-              >
-                Sign Up
-              </button>
+              <button type='submit' className='btn w-full h-12 bg-teal-400 hover:bg-teal-500 text-black font-bold text-lg rounded-lg border-none normal-case shadow-lg shadow-teal-500/20 transition-all duration-300'>Sign Up</button>
             </div>
           </form>
    
           <p className='text-center text-sm text-gray-400 mt-4'>
             Already have an account?{' '}
-            <Link
-              to='/login'
-              className='font-bold text-white hover:text-teal-400 hover:underline transition-all ml-1'
-            >
-              Login
-            </Link>
+            <Link to='/login' className='font-bold text-white hover:text-teal-400 hover:underline transition-all ml-1'>Login</Link>
           </p>
         </div>
       </div>
