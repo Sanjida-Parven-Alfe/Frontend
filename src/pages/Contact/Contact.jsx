@@ -6,17 +6,15 @@ const Contact = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-24">
             
-            {/* --- Background Blobs --- */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* --- Content --- */}
             <div className="pt-32 pb-20 px-6 relative z-10">
                 
-                {/* Header */}
+               
                 <div className="text-center mb-16">
                     <motion.h1 
                         initial={{ opacity: 0, y: -20 }}
@@ -32,7 +30,7 @@ const Contact = () => {
                     
                     {/* Contact Info & Form */}
                     <div className="space-y-8">
-                        {/* Contact Cards */}
+                       
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="glass-card p-6 rounded-xl border border-white/5 flex flex-col items-center text-center hover:border-brand-teal/50 transition-colors">
                                 <div className="w-12 h-12 rounded-full bg-brand-teal/20 flex items-center justify-center text-brand-teal mb-4 text-xl">
@@ -83,7 +81,6 @@ const Contact = () => {
                         </motion.div>
                     </div>
 
-                    {/* FAQ & Map Placeholder */}
                     <div className="space-y-8">
                         {/* FAQ Section */}
                         <div>
