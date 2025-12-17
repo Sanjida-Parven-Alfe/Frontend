@@ -29,17 +29,16 @@ const Services = () => {
     });
 
     return (
-        // Theme applied: bg-brand-dark, selection colors, -mt-20 fix
         <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
             
-            {/* --- Background Blobs (Home Page Theme) --- */}
+            {/* --- Background Blobs --- */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* Content Container (pt-32 added for navbar gap) */}
+            {/* Content Container */}
             <div className="pt-32 pb-10 px-6 relative z-10">
                 
                 {/* Header Section */}
@@ -48,25 +47,29 @@ const Services = () => {
                     <p className="text-gray-400">Find the perfect decoration package for your next event.</p>
                 </div>
 
-                {/* Filter & Search Section (Glass Effect) */}
-                <div className="max-w-6xl mx-auto glass-card p-6 rounded-2xl mb-12 border border-white/10 shadow-xl">
-                    <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
+                {/* Filter & Search Section (Improved Alignment) */}
+                <div className="max-w-6xl mx-auto glass-card p-8 rounded-2xl mb-12 border border-white/10 shadow-xl">
+                    <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
                         
                         {/* Search */}
-                        <div className="relative w-full md:w-1/3">
-                            <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
-                            <input 
-                                type="text" 
-                                placeholder="Search service name..." 
-                                className="w-full bg-black/30 border border-gray-600 rounded-full py-3 pl-10 pr-4 focus:outline-none focus:border-brand-teal transition-colors text-white"
-                                onChange={(e) => setSearchText(e.target.value)}
-                            />
+                        <div className="w-full md:w-5/12">
+                            <label className="text-xs text-gray-400 mb-2 block ml-1">Search Service</label>
+                            <div className="relative">
+                                <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
+                                <input 
+                                    type="text" 
+                                    placeholder="e.g. Wedding, Office..." 
+                                    className="w-full bg-black/30 border border-gray-600 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-brand-teal transition-colors text-white h-12"
+                                    onChange={(e) => setSearchText(e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         {/* Category Filter */}
-                        <div className="w-full md:w-1/4">
+                        <div className="w-full md:w-3/12">
+                            <label className="text-xs text-gray-400 mb-2 block ml-1">Filter by Category</label>
                             <select 
-                                className="select select-bordered w-full rounded-full bg-black/30 border-gray-600 focus:border-brand-teal text-white"
+                                className="select select-bordered pl-3 w-full rounded-xl bg-black/30 border-gray-600 focus:border-brand-teal text-white h-12 min-h-[48px]"
                                 onChange={(e) => setFilterType(e.target.value)}
                             >
                                 <option value="All">All Categories</option>
@@ -78,22 +81,20 @@ const Services = () => {
                         </div>
 
                         {/* Price Range */}
-                        <div className="w-full md:w-1/3 flex items-center gap-4">
-                            <div className="flex flex-col w-full">
-                                <label className="text-xs text-gray-400 mb-1">Budget Range ($)</label>
-                                <div className="flex gap-2">
-                                    <input 
-                                        type="number" placeholder="Min" 
-                                        className="input input-sm input-bordered w-full bg-black/30 border-gray-600 text-white"
-                                        onChange={(e) => setPriceRange({...priceRange, min: Number(e.target.value) || 0})}
-                                    />
-                                    <span className="text-gray-400">-</span>
-                                    <input 
-                                        type="number" placeholder="Max" 
-                                        className="input input-sm input-bordered w-full bg-black/30 border-gray-600 text-white"
-                                        onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value) || 10000})}
-                                    />
-                                </div>
+                        <div className="w-full md:w-4/12">
+                            <label className="text-xs text-gray-400 mb-2 block ml-1">Budget Range ($)</label>
+                            <div className="flex gap-3 items-center">
+                                <input 
+                                    type="number" placeholder="Min" 
+                                    className="input input-bordered w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
+                                    onChange={(e) => setPriceRange({...priceRange, min: Number(e.target.value) || 0})}
+                                />
+                                <span className="text-gray-400 font-bold">-</span>
+                                <input 
+                                    type="number" placeholder="Max" 
+                                    className="input input-bordered w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
+                                    onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value) || 10000})}
+                                />
                             </div>
                         </div>
                     </div>
