@@ -7,7 +7,7 @@ import logo from '../../assets/image/logo.png'
 import axios from 'axios'
 import { AuthContext } from '../../providers/AuthProvider'
 
-const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_key = "7a089961132e8beee1327e27b2afc934";
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const SignUp = () => {
@@ -23,6 +23,12 @@ const SignUp = () => {
   } = useForm()
 
   const onSubmit = async (data) => {
+    // ছবি সিলেক্ট করা হয়েছে কিনা চেক করা
+    if (!data.photo || data.photo.length === 0) {
+        alert("Please select a profile photo!");
+        return;
+    }
+
     const imageFile = { image: data.photo[0] }
     try {
         const res = await axios.post(image_hosting_api, imageFile, {
@@ -39,16 +45,19 @@ const SignUp = () => {
                     updateUserProfile(data.name, photoURL)
                         .then(() => {
                             reset()
+                            alert("Account Created Successfully!")
                             navigate('/')
                         })
                         .catch(error => console.log(error))
                 })
                 .catch(error => {
                     console.error(error)
+                    alert("Sign Up Failed: " + error.message)
                 })
         }
     } catch (error) {
         console.error("Image Upload Failed or Sign Up Error", error)
+        alert("Image Upload Failed! " + error.message)
     }
   }
 
@@ -57,7 +66,10 @@ const SignUp = () => {
     .then(result =>{
         navigate('/')
     })
-    .catch(error => console.error(error))
+    .catch(error => {
+        console.error(error)
+        alert("Google Sign In Failed: " + error.message)
+    })
   }
 
   return (
@@ -141,9 +153,7 @@ const SignUp = () => {
               <div className="relative">
                 <input type={showPassword ? "text" : "password"} placeholder="Create a password" className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 text-sm ${errors.password ? 'input-error bg-red-900/10' : ''}`} {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password 6+ chars' } })} />
                 
-                {/* এই বাটনে z-10 যোগ করা হয়েছে */}
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center z-10 text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}</button>
-              
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center z-50 text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}</button>
               </div>
               {errors.password && <span className='text-red-400 text-xs mt-1'>{errors.password.message}</span>}
             </div>
