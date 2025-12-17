@@ -106,7 +106,10 @@ const Login = () => {
               </div>
               <div className="relative">
                 <input type={showPassword ? "text" : "password"} placeholder="Enter your password" className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 ${errors.password ? 'input-error bg-red-900/10' : ''}`} {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password must be at least 6 characters' } })} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={20}/> : <FaEye size={20} />}</button>
+                
+                {/* z-10 যোগ করা হয়েছে যাতে বাটনটি ইনপুটের উপরে থাকে */}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center z-10 text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={20}/> : <FaEye size={20} />}</button>
+              
               </div>
               {errors.password && <span className='text-red-400 text-xs mt-1 font-medium'>{errors.password.message}</span>}
             </div>
