@@ -31,23 +31,22 @@ const Services = () => {
     return (
         <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
             
-            {/* --- Background Blobs --- */}
+        
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
                 <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* Content Container */}
+        
             <div className="pt-32 pb-10 px-6 relative z-10">
-                
-                {/* Header Section */}
+        
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">Explore Our <span className="text-brand-teal">Services</span></h1>
                     <p className="text-gray-400">Find the perfect decoration package for your next event.</p>
                 </div>
 
-                {/* Filter & Search Section (Improved Alignment) */}
+   
                 <div className="max-w-6xl mx-auto glass-card p-8 rounded-2xl mb-12 border border-white/10 shadow-xl">
                     <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
                         
