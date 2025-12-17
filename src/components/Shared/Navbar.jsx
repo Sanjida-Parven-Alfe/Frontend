@@ -1,14 +1,23 @@
-import { Link, NavLink } from 'react-router-dom'
-import avatarImg from '../../assets/image/avatar.png'
-import logo from '../../assets/image/logo.png'
+import React, { useContext } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../providers/AuthProvider' 
+import avatarImg from '../../../assets/image/avatar.png'
+import logo from '../../../assets/image/logo.png'
 
 const Navbar = () => {
-  const user = null 
-  
-  const logOut = () => {
-    console.log('Logout Clicked')
-  }
 
+  const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        console.log("Logged out successfully");
+        navigate('/'); 
+      })
+      .catch(error => console.error(error))
+  }
 
   const navOptions = (
     <>
@@ -17,8 +26,8 @@ const Navbar = () => {
           to='/'
           className={({ isActive }) =>
             isActive 
-              ? 'text-primary font-bold' 
-              : 'font-medium text-white hover:text-primary transition-colors duration-200'
+              ? 'text-teal-400 font-bold' 
+              : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
           }
         >
           Home
@@ -29,8 +38,8 @@ const Navbar = () => {
           to='/services'
           className={({ isActive }) =>
             isActive 
-              ? 'text-primary font-bold' 
-              : 'font-medium text-white hover:text-primary transition-colors duration-200'
+              ? 'text-teal-400 font-bold' 
+              : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
           }
         >
           Services
@@ -41,8 +50,8 @@ const Navbar = () => {
           to='/about'
           className={({ isActive }) =>
             isActive 
-              ? 'text-primary font-bold' 
-              : 'font-medium text-white hover:text-primary transition-colors duration-200'
+              ? 'text-teal-400 font-bold' 
+              : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
           }
         >
           About
@@ -53,22 +62,23 @@ const Navbar = () => {
           to='/contact'
           className={({ isActive }) =>
             isActive 
-              ? 'text-primary font-bold' 
-              : 'font-medium text-white hover:text-primary transition-colors duration-200'
+              ? 'text-teal-400 font-bold' 
+              : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
           }
         >
           Contact
         </NavLink>
       </li>
 
+  
       {user && (
         <li>
           <NavLink
             to='/dashboard'
             className={({ isActive }) =>
               isActive 
-                ? 'text-primary font-bold' 
-                : 'font-medium text-white hover:text-primary transition-colors duration-200'
+                ? 'text-teal-400 font-bold' 
+                : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
             }
           >
             Dashboard
@@ -79,11 +89,9 @@ const Navbar = () => {
   )
 
   return (
-  
-    <div className='navbar fixed z-10 bg-gray-900/95 backdrop-blur-md shadow-md px-4 lg:px-20 text-white'>
+    <div className='navbar fixed z-50 bg-[#0f172a]/95 backdrop-blur-md shadow-md px-4 lg:px-20 text-white'>
       
       <div className='navbar-start'>
-
         {/* Mobile Dropdown */}
         <div className='dropdown'>
           <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden pl-0'>
@@ -102,21 +110,19 @@ const Navbar = () => {
               />
             </svg>
           </div>
-
           <ul
             tabIndex={0}
-            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-gray-800 rounded-box w-52 border border-gray-700'
+            className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-[#1e293b] rounded-box w-52 border border-gray-700'
           >
             {navOptions}
           </ul>
         </div>
         
-        {/* Logo */}
-        
+        {/* Logo & Brand Name */}
         <Link to='/' className='flex items-center gap-2'>
-            <img src={logo} alt="StyleDecor" className="w-10 h-10 md:w-10 md:h-10 object-contain" />
-            <span className='text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
-            StyleDecor
+            <img src={logo} alt="StyleDecor" className="w-8 h-8 md:w-10 md:h-10 object-contain brightness-0 invert" />
+            <span className='text-xl md:text-2xl font-extrabold text-white tracking-tight'>
+            Style<span className='text-teal-400'>Decor</span>
           </span>
         </Link>
       </div>
@@ -128,17 +134,18 @@ const Navbar = () => {
       </div>
 
       <div className='navbar-end'>
+       
         {user ? (
           <div className='dropdown dropdown-end'>
             <div
               tabIndex={0}
               role='button'
-              className='btn btn-ghost btn-circle avatar border border-gray-500'
+              className='btn btn-ghost btn-circle avatar border border-teal-400/50 hover:border-teal-400 transition-all'
             >
               <div className='w-10 rounded-full'>
                 <img
                   alt='User Profile'
-                  src={user?.photoURL || avatarImg}
+                  src={user?.photoURL || avatarImg} 
                   referrerPolicy='no-referrer'
                 />
               </div>
@@ -146,27 +153,27 @@ const Navbar = () => {
 
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-gray-800 border border-gray-700 rounded-box w-52 text-white'
+              className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-[#1e293b] border border-gray-700 rounded-box w-52 text-white'
             >
-              <li className='pointer-events-none'>
-                <span className='font-bold text-center block text-primary'>{user?.displayName}</span>
+              <li className='pointer-events-none px-2 py-1'>
+                <span className='font-bold block text-teal-400 text-center text-lg capitalize'>{user?.displayName}</span>
+                <span className='block text-xs text-gray-400 text-center truncate'>{user?.email}</span>
               </li>
-              <div className='divider divider-neutral my-1'></div>
+              <div className='divider divider-neutral my-1 before:bg-gray-600 after:bg-gray-600'></div>
               <li>
-                <Link to='/dashboard' className='hover:text-primary'>Dashboard</Link>
+                <Link to='/dashboard' className='hover:text-teal-400 hover:bg-white/5'>Dashboard</Link>
               </li>
               <li>
-                <button onClick={logOut} className='text-error font-medium hover:bg-gray-700'>Logout</button>
+                <button onClick={handleLogOut} className='text-red-400 font-medium hover:bg-red-500/10 hover:text-red-500 mt-1'>Logout</button>
               </li>
             </ul>
           </div>
         ) : (
-          <div className='flex gap-2'>
-
-            <Link to='/login' className='btn btn-ghost btn-sm text-white hover:bg-gray-800'>
+          <div className='flex gap-3'>
+            <Link to='/login' className='btn btn-ghost btn-sm text-white hover:bg-white/10 font-normal hidden sm:flex'>
               Login
             </Link>
-            <Link to='/signup' className='btn btn-primary btn-sm text-white px-4 border-none'>
+            <Link to='/signup' className='btn bg-teal-400 hover:bg-teal-500 text-black border-none btn-sm px-5 font-bold rounded-full transition-all shadow-lg shadow-teal-500/20'>
               Join Us
             </Link>
           </div>
