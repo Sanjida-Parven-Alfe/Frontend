@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../../providers/AuthProvider'; // আপনার AuthContext পাথ
+import { AuthContext } from '../../providers/AuthProvider';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCheckCircle, FaStar, FaMapMarkerAlt, FaCalendarAlt } from 'react-icons/fa';
@@ -18,10 +18,8 @@ const ServiceDetails = () => {
     const [bookingDate, setBookingDate] = useState(new Date());
     const [address, setAddress] = useState('');
 
-    // ফেক ডাটা ফেচিং (ব্যাকএন্ড থাকলে axios দিয়ে করবেন)
     useEffect(() => {
-        // এখানে আপনি id দিয়ে সার্ভার থেকে ডাটা আনবেন
-        // আপাতত ডামি ডাটা:
+        // Dummy data fetch
         const dummyService = { 
             id: id, 
             title: "Corporate Aesthetics", 
@@ -40,7 +38,6 @@ const ServiceDetails = () => {
         if (user) {
             setIsModalOpen(true);
         } else {
-            // লগইন না থাকলে লগইন পেজে পাঠাবে, এবং লগইন শেষে আবার এই পেজে ফিরিয়ে আনবে
             navigate('/login', { state: { from: location } });
         }
     };
@@ -60,89 +57,96 @@ const ServiceDetails = () => {
             status: 'pending'
         };
 
-        // TODO: Send bookingData to Backend
         console.log("Booking Data:", bookingData);
-        
         alert("Booking request submitted successfully!");
         setIsModalOpen(false);
     };
 
-    if (!service) return <div className="text-center mt-32 text-white">Loading...</div>;
+    if (!service) return <div className="text-center mt-32 text-white bg-brand-dark h-screen pt-20">Loading...</div>;
 
     return (
-        <div className="bg-[#0f172a] min-h-screen text-white pt-24 pb-12 font-sans relative">
+        <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
             
-            {/* Service Details Container */}
-            <div className="max-w-6xl mx-auto px-6">
-                
-                {/* Image Section */}
-                <div className="w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden mb-10 shadow-2xl border border-gray-700 relative">
-                    <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
-                    <div className="absolute bottom-8 left-8">
-                        <span className="bg-teal-400 text-black px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-2 inline-block">
-                            {service.category}
-                        </span>
-                        <h1 className="text-4xl md:text-6xl font-bold text-white shadow-black drop-shadow-lg">{service.title}</h1>
-                    </div>
-                </div>
+   
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
+                <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
+                <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    {/* Left Column: Info */}
-                    <div className="md:col-span-2 space-y-8">
-                        <div>
-                            <h2 className="text-2xl font-bold mb-4 text-teal-400">Description</h2>
-                            <p className="text-gray-300 leading-relaxed text-lg">{service.description}</p>
-                        </div>
-
-                        <div>
-                            <h2 className="text-2xl font-bold mb-4 text-teal-400">What's Included</h2>
-                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {service.features.map((feature, index) => (
-                                    <li key={index} className="flex items-center gap-3 bg-[#1e293b] p-4 rounded-xl border border-gray-700">
-                                        <FaCheckCircle className="text-green-400" />
-                                        <span>{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
+      
+            <div className="pt-32 pb-12 relative z-10 font-sans">
+                <div className="max-w-6xl mx-auto px-6">
+                    
+              
+                    <div className="w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden mb-10 shadow-2xl border border-white/10 relative group">
+                        <img src={service.image} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-90"></div>
+                        <div className="absolute bottom-8 left-8">
+                            <span className="bg-brand-teal text-black px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider mb-2 inline-block">
+                                {service.category}
+                            </span>
+                            <h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg">{service.title}</h1>
                         </div>
                     </div>
 
-                    {/* Right Column: Pricing Card */}
-                    <div className="md:col-span-1">
-                        <div className="bg-[#1e293b] p-8 rounded-3xl border border-gray-700 sticky top-28 shadow-xl">
-                            <div className="flex justify-between items-center mb-6">
-                                <div>
-                                    <p className="text-gray-400 text-sm">Starting Price</p>
-                                    <p className="text-4xl font-bold text-white">${service.price}</p>
-                                </div>
-                                <div className="text-right">
-                                    <div className="flex items-center gap-1 text-yellow-400 font-bold text-lg">
-                                        <FaStar /> {service.rating}
-                                    </div>
-                                    <p className="text-xs text-gray-500">({service.reviews} reviews)</p>
-                                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    
+                        <div className="md:col-span-2 space-y-8">
+                            <div className="glass-card p-8 rounded-3xl border border-white/5">
+                                <h2 className="text-2xl font-bold mb-4 text-brand-teal">Description</h2>
+                                <p className="text-gray-300 leading-relaxed text-lg">{service.description}</p>
                             </div>
 
-                            <button 
-                                onClick={handleBookNow}
-                                className="btn w-full bg-teal-400 hover:bg-teal-500 text-black font-bold text-lg rounded-xl h-14 border-none shadow-lg shadow-teal-500/20"
-                            >
-                                Book Now
-                            </button>
-                            <p className="text-center text-xs text-gray-500 mt-4">You won't be charged yet</p>
+                            <div>
+                                <h2 className="text-2xl font-bold mb-4 text-white pl-2 border-l-4 border-brand-red">What's Included</h2>
+                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {service.features.map((feature, index) => (
+                                        <li key={index} className="flex items-center gap-3 glass-card p-4 rounded-xl border border-white/5 hover:border-brand-teal/30 transition-colors">
+                                            <FaCheckCircle className="text-brand-teal" />
+                                            <span>{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
+                  
+                        <div className="md:col-span-1">
+                            <div className="glass-card p-8 rounded-3xl border border-white/10 sticky top-28 shadow-2xl">
+                                <div className="flex justify-between items-center mb-6">
+                                    <div>
+                                        <p className="text-gray-400 text-sm">Starting Price</p>
+                                        <p className="text-4xl font-bold text-white">${service.price}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="flex items-center gap-1 text-brand-yellow font-bold text-lg">
+                                            <FaStar /> {service.rating}
+                                        </div>
+                                        <p className="text-xs text-gray-500">({service.reviews} reviews)</p>
+                                    </div>
+                                </div>
+
+                                <button 
+                                    onClick={handleBookNow}
+                                    className="btn w-full bg-brand-teal hover:bg-teal-400 text-black font-bold text-lg rounded-xl h-14 border-none shadow-[0_0_20px_rgba(78,205,196,0.3)] hover:shadow-[0_0_30px_rgba(78,205,196,0.5)] transition-all"
+                                >
+                                    Book Now
+                                </button>
+                                <p className="text-center text-xs text-gray-500 mt-4">You won't be charged yet</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* --- Booking Modal --- */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-[#1e293b] w-full max-w-lg rounded-2xl border border-gray-600 shadow-2xl p-8 relative animate-blob">
+
+                    <div className="bg-[#1e293b] w-full max-w-lg rounded-2xl border border-gray-600 shadow-2xl p-8 relative">
                         <button 
                             onClick={() => setIsModalOpen(false)} 
-                            className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-white"
+                            className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-white hover:bg-white/10"
                         >✕</button>
                         
                         <h3 className="text-2xl font-bold mb-6 text-center text-white">Confirm Booking</h3>
@@ -152,51 +156,51 @@ const ServiceDetails = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="form-control">
                                     <label className="label text-xs text-gray-400">Service</label>
-                                    <input type="text" value={service.title} readOnly className="input input-bordered bg-[#0f172a] text-gray-300 border-gray-600 focus:outline-none" />
+                                    <input type="text" value={service.title} readOnly className="input input-bordered bg-black/30 text-gray-300 border-gray-600 focus:outline-none" />
                                 </div>
                                 <div className="form-control">
                                     <label className="label text-xs text-gray-400">Price</label>
-                                    <input type="text" value={`$${service.price}`} readOnly className="input input-bordered bg-[#0f172a] text-gray-300 border-gray-600 focus:outline-none" />
+                                    <input type="text" value={`$${service.price}`} readOnly className="input input-bordered bg-black/30 text-gray-300 border-gray-600 focus:outline-none" />
                                 </div>
                             </div>
 
                             <div className="form-control">
                                 <label className="label text-xs text-gray-400">Your Name</label>
-                                <input type="text" value={user?.displayName || ''} readOnly className="input input-bordered bg-[#0f172a] text-gray-300 border-gray-600 focus:outline-none" />
+                                <input type="text" value={user?.displayName || ''} readOnly className="input input-bordered bg-black/30 text-gray-300 border-gray-600 focus:outline-none" />
                             </div>
                             
                             <div className="form-control">
                                 <label className="label text-xs text-gray-400">Your Email</label>
-                                <input type="text" value={user?.email || ''} readOnly className="input input-bordered bg-[#0f172a] text-gray-300 border-gray-600 focus:outline-none" />
+                                <input type="text" value={user?.email || ''} readOnly className="input input-bordered bg-black/30 text-gray-300 border-gray-600 focus:outline-none" />
                             </div>
 
                             {/* User Input Fields */}
                             <div className="form-control">
-                                <label className="label text-sm font-semibold text-teal-400 flex items-center gap-2">
+                                <label className="label text-sm font-semibold text-brand-teal flex items-center gap-2">
                                     <FaCalendarAlt /> Select Date
                                 </label>
                                 <DatePicker 
                                     selected={bookingDate} 
                                     onChange={(date) => setBookingDate(date)} 
-                                    className="input input-bordered w-full bg-[#0f172a] text-white border-gray-500 focus:border-teal-400"
+                                    className="input input-bordered w-full bg-black/30 text-white border-gray-500 focus:border-brand-teal"
                                     minDate={new Date()}
                                 />
                             </div>
 
                             <div className="form-control">
-                                <label className="label text-sm font-semibold text-teal-400 flex items-center gap-2">
+                                <label className="label text-sm font-semibold text-brand-teal flex items-center gap-2">
                                     <FaMapMarkerAlt /> Event Address
                                 </label>
                                 <textarea 
                                     required
-                                    className="textarea textarea-bordered bg-[#0f172a] text-white border-gray-500 focus:border-teal-400 h-24" 
+                                    className="textarea textarea-bordered bg-black/30 text-white border-gray-500 focus:border-brand-teal h-24" 
                                     placeholder="Enter full address details..."
                                     onChange={(e) => setAddress(e.target.value)}
                                 ></textarea>
                             </div>
 
                             <div className="pt-4">
-                                <button type="submit" className="btn w-full bg-teal-400 hover:bg-teal-500 text-black font-bold border-none">
+                                <button type="submit" className="btn w-full bg-brand-teal hover:bg-teal-400 text-black font-bold border-none rounded-full">
                                     Confirm Purchase
                                 </button>
                             </div>
