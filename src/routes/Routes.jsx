@@ -1,7 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import MainLayout from '../layout/MainLayout'
-import Login from '../pages/Login/login'
+import Login from '../pages/Login/Login' 
 import SignUp from '../pages/SignUp/SignUp'
+import Home from '../pages/Homepage/Home'
+import Services from '../pages/Services/Services'
+import ServiceDetails from '../pages/ServiceDetails/ServiceDetails'
 
 
 export const router = createBrowserRouter([
@@ -12,11 +15,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <div className='text-center text-3xl font-bold mt-20'>Welcome to StyleDecor!</div>,
+        element: <Home />, 
       },
       {
         path: '/services',
-        element: <div className='text-center mt-20'>Services Page Content</div>,
+        element: <Services />, 
+      },
+      {
+        path: '/services/:id', 
+        element: <ServiceDetails />, 
       },
       {
         path: '/login', 

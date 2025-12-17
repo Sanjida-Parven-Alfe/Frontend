@@ -71,20 +71,6 @@ const Navbar = () => {
       </li>
 
   
-      {user && (
-        <li>
-          <NavLink
-            to='/dashboard'
-            className={({ isActive }) =>
-              isActive 
-                ? 'text-teal-400 font-bold' 
-                : 'font-medium text-white hover:text-teal-400 transition-colors duration-200'
-            }
-          >
-            Dashboard
-          </NavLink>
-        </li>
-      )}
     </>
   )
 
