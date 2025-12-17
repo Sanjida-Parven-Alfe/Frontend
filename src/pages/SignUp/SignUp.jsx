@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 import logo from '../../assets/image/logo.png'
 import axios from 'axios'
 import { AuthContext } from '../../providers/AuthProvider'
 
-
-const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY || "আপনার_IMAGEBB_KEY_এখানে_দিন";
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const SignUp = () => {
-  const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext);
+  const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
@@ -23,55 +23,45 @@ const SignUp = () => {
   } = useForm()
 
   const onSubmit = async (data) => {
-
     const imageFile = { image: data.photo[0] }
     try {
         const res = await axios.post(image_hosting_api, imageFile, {
             headers: {
                 'content-type': 'multipart/form-data'
             }
-        });
+        })
 
         if (res.data.success) {
-            const photoURL = res.data.data.display_url;
+            const photoURL = res.data.data.display_url
             
-           
             createUser(data.email, data.password)
                 .then(result => {
-                    const loggedUser = result.user;
-                    console.log(loggedUser);
-
                     updateUserProfile(data.name, photoURL)
                         .then(() => {
-                            console.log('User profile updated');
-                            reset();
-                      
-                            navigate('/');
+                            reset()
+                            navigate('/')
                         })
                         .catch(error => console.log(error))
                 })
                 .catch(error => {
-                    console.error(error);
-          
+                    console.error(error)
                 })
         }
     } catch (error) {
-        console.error("Image Upload Failed or Sign Up Error", error);
+        console.error("Image Upload Failed or Sign Up Error", error)
     }
   }
 
   const handleGoogleSignIn = () => {
     googleSignIn()
     .then(result =>{
-        console.log(result.user);
-        navigate('/');
+        navigate('/')
     })
     .catch(error => console.error(error))
   }
 
   return (
     <div className='flex h-screen bg-[#0f172a] font-sans -mt-24 overflow-hidden'>
-      {/* Left Side */}
       <div
         className='hidden lg:flex lg:w-1/2 h-full items-center justify-center bg-cover bg-center relative'
         style={{
@@ -87,7 +77,6 @@ const SignUp = () => {
         </div>
       </div>
   
-      {/* Right Side */}
       <div 
         className='w-full lg:w-1/2 h-full flex items-center justify-center p-6 lg:p-12 relative z-0 overflow-y-auto'
         style={{
@@ -110,7 +99,7 @@ const SignUp = () => {
             onClick={handleGoogleSignIn} 
             className="btn btn-outline w-full h-11 min-h-[44px] border-gray-600 hover:bg-white hover:text-black text-white font-medium normal-case flex items-center justify-center gap-2 transition-all duration-200 rounded-lg mb-4 text-sm"
           >
-             <FaGoogle className="text-red-500 text-lg" />
+             <FcGoogle className="text-xl" />
              <span>Sign up with Google</span>
           </button>
 
