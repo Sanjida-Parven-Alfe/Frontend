@@ -120,7 +120,7 @@ const Navbar = () => {
         
         {/* Logo & Brand Name */}
         <Link to='/' className='flex items-center gap-2'>
-            <img src={logo} alt="StyleDecor" className="w-8 h-8 md:w-10 md:h-10 object-contain brightness-0 invert" />
+            <img src={logo} alt="StyleDecor" className="w-8 h-8 md:w-10 md:h-10" />
             <span className='text-xl md:text-2xl font-extrabold text-white tracking-tight'>
             Style<span className='text-teal-400'>Decor</span>
           </span>
