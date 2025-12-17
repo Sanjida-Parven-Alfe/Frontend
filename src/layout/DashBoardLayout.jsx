@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'; // hook useRole (custom hook) later
+import React, { useContext } from 'react'; 
 import { Link, Outlet, NavLink } from 'react-router-dom';
-import { FaHome, FaUsers, FaCalendarAlt, FaWallet, FaclipboardList, FaAd, FaUserCog } from 'react-icons/fa';
-import { MdDashboard, MdAddBusiness, MdRateReview } from 'react-icons/md';
+// Fix: FaclipboardList -> FaClipboardList
+import { FaHome, FaUsers, FaCalendarAlt, FaWallet, FaClipboardList, FaUserCog } from 'react-icons/fa';
+import { MdDashboard, MdAddBusiness } from 'react-icons/md';
 import { AuthContext } from '../providers/AuthProvider';
 
 const DashboardLayout = () => {
     const { user } = useContext(AuthContext);
 
-    const isAdmin = true; 
+    // TODO: এই ভ্যালুগুলো ডাটাবেস থেকে চেক করতে হবে (useAdmin / useDecorator hook)
+    const isAdmin = true; // টেস্টিং এর জন্য true দিয়ে রাখুন
     const isDecorator = false; 
 
     return (
@@ -44,7 +46,8 @@ const DashboardLayout = () => {
                         <>
                             <li><NavLink to="/dashboard/adminHome" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><MdDashboard /> Admin Home</NavLink></li>
                             <li><NavLink to="/dashboard/addService" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><MdAddBusiness /> Add Service</NavLink></li>
-                            <li><NavLink to="/dashboard/manageServices" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><FaclipboardList /> Manage Services</NavLink></li>
+                            {/* Fix: Icon Name Fixed Here Also */}
+                            <li><NavLink to="/dashboard/manageServices" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><FaClipboardList /> Manage Services</NavLink></li>
                             <li><NavLink to="/dashboard/manageBookings" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><FaCalendarAlt /> Manage Bookings</NavLink></li>
                             <li><NavLink to="/dashboard/allUsers" className={({isActive}) => isActive ? "bg-brand-teal text-black font-bold" : "hover:text-brand-teal"}><FaUsers /> All Users</NavLink></li>
                         </>
