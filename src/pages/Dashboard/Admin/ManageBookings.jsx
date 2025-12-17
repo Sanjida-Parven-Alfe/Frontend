@@ -9,7 +9,6 @@ const ManageBookings = () => {
     ];
 
     const handleAssignDecorator = (id) => {
-        // মক ফাংশনালিটি: এখানে মোডাল ওপেন করে ডেকোরেটর সিলেক্ট করা যাবে
         const decoratorName = prompt("Enter Decorator Name to Assign:");
         if(decoratorName) alert(`Assigned ${decoratorName} to Booking ID: ${id}`);
     };

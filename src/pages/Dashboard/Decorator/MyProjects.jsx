@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { FaMapMarkerAlt, FaSyncAlt } from 'react-icons/fa';
 
 const MyProjects = () => {
-    // ডামি প্রজেক্ট ডাটা
     const [projects, setProjects] = useState([
         { _id: 101, service: "Grand Wedding Stage", client: "Mr. Khan", address: "Gulshan Club, Dhaka", status: "Assigned", date: "2025-01-20" },
         { _id: 102, service: "Corporate Seminar", client: "ABC Corp", address: "Banani, Dhaka", status: "In Progress", date: "2025-01-22" },
     ]);
 
     const handleStatusUpdate = (id, newStatus) => {
-        // TODO: API Call to update status
         const updatedProjects = projects.map(p => p._id === id ? { ...p, status: newStatus } : p);
         setProjects(updatedProjects);
         alert(`Project status updated to: ${newStatus}`);
