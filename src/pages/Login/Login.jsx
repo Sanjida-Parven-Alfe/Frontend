@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa'
 import logo from '../../assets/image/logo.png'
+import { AuthContext } from '../../providers/AuthProvider'
 
 const Login = () => {
+  const { signIn, googleSignIn } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -18,17 +20,33 @@ const Login = () => {
   } = useForm()
 
   const onSubmit = (data) => {
-    console.log('Login Data:', data)
+
+    signIn(data.email, data.password)
+        .then(result => {
+            const user = result.user;
+            console.log(user);
+      
+            navigate(from, { replace: true });
+        })
+        .catch(error => {
+            console.error(error);
+        
+            alert("Login Failed: " + error.message);
+        })
   }
 
   const handleGoogleLogin = () => {
-     console.log('Google Login Clicked');
+     googleSignIn()
+       .then(result => {
+          console.log(result.user);
+          navigate(from, { replace: true });
+       })
+       .catch(error => console.error(error))
   }
 
   return (
     <div className='flex min-h-screen bg-[#0f172a] font-sans -mt-24'>
-      
-    
+      {/* Left Side */}
       <div
         className='hidden lg:flex lg:w-1/2 items-center justify-center bg-cover bg-center relative'
         style={{
@@ -44,7 +62,7 @@ const Login = () => {
         </div>
       </div>
 
-    
+      {/* Right Side */}
       <div 
         className='w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 relative z-0'
         style={{
@@ -56,20 +74,11 @@ const Login = () => {
             `
         }}
       >
-       
         <div className='w-full max-w-[450px] mt-20 lg:mt-0'> 
-
           <div className='text-center mb-5'>
             <img src={logo} alt="Logo" className="lg:hidden mx-auto h-12 w-auto mb-4 brightness-0 invert" />
-            
-    
-            <h2 className='text-3xl font-bold text-white pt-4'>
-              Sign In
-            </h2>
-        
-            <p className='mt-2 text-gray-400 text-sm'>
-              Please enter your details to access your account.
-            </p>
+            <h2 className='text-3xl font-bold text-white pt-4'>Sign In</h2>
+            <p className='mt-2 text-gray-400 text-sm'>Please enter your details to access your account.</p>
           </div>
 
           <button 
@@ -87,20 +96,12 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
-
             <div className="form-control w-full">
               <label className="label pb-1.5">
                 <span className="label-text font-semibold text-gray-300">Email Address</span>
               </label>
-              <input
-                type="email"
-                placeholder="mail@example.com"
-                className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg ${errors.email ? 'input-error bg-red-900/10' : ''}`}
-                {...register('email', { required: 'Email is required' })}
-              />
-              {errors.email && (
-                <span className='text-red-400 text-xs mt-1 font-medium'>{errors.email.message}</span>
-              )}
+              <input type="email" placeholder="mail@example.com" className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg ${errors.email ? 'input-error bg-red-900/10' : ''}`} {...register('email', { required: 'Email is required' })} />
+              {errors.email && <span className='text-red-400 text-xs mt-1 font-medium'>{errors.email.message}</span>}
             </div>
 
             <div className="form-control w-full">
@@ -108,52 +109,23 @@ const Login = () => {
                   <label className="label p-0">
                     <span className="label-text font-semibold text-gray-300">Password</span>
                   </label>
-                  <a href="#" className="text-xs font-medium text-teal-400 hover:text-teal-300 hover:underline">
-                      Forgot password?
-                  </a>
+                  <a href="#" className="text-xs font-medium text-teal-400 hover:text-teal-300 hover:underline">Forgot password?</a>
               </div>
-              
               <div className="relative">
-                <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 ${errors.password ? 'input-error bg-red-900/10' : ''}`}
-                    {...register('password', { 
-                        required: 'Password is required',
-                        minLength: { value: 6, message: 'Password must be at least 6 characters' }
-                    })}
-                />
-                <button 
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer"
-                >
-                    {showPassword ? <FaEyeSlash size={20}/> : <FaEye size={20} />}
-                </button>
+                <input type={showPassword ? "text" : "password"} placeholder="Enter your password" className={`input input-bordered pl-2 w-full h-12 bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 ${errors.password ? 'input-error bg-red-900/10' : ''}`} {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password must be at least 6 characters' } })} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={20}/> : <FaEye size={20} />}</button>
               </div>
-              {errors.password && (
-                <span className='text-red-400 text-xs mt-1 font-medium'>{errors.password.message}</span>
-              )}
+              {errors.password && <span className='text-red-400 text-xs mt-1 font-medium'>{errors.password.message}</span>}
             </div>
 
             <div className="pt-2">
-              <button 
-                type='submit' 
-                className='btn w-full h-12 bg-teal-400 hover:bg-teal-500 text-black font-bold text-lg rounded-lg border-none normal-case shadow-lg shadow-teal-500/20 transition-all duration-300'
-              >
-                Sign In
-              </button>
+              <button type='submit' className='btn w-full h-12 bg-teal-400 hover:bg-teal-500 text-black font-bold text-lg rounded-lg border-none normal-case shadow-lg shadow-teal-500/20 transition-all duration-300'>Sign In</button>
             </div>
           </form>
 
           <p className='text-center text-sm text-gray-400 mt-6'>
             Don't have an account?{' '}
-            <Link
-              to='/signup'
-              className='font-bold text-white hover:text-teal-400 hover:underline transition-all ml-1'
-            >
-              Create free account
-            </Link>
+            <Link to='/signup' className='font-bold text-white hover:text-teal-400 hover:underline transition-all ml-1'>Create free account</Link>
           </p>
         </div>
       </div>
