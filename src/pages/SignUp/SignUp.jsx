@@ -140,7 +140,10 @@ const SignUp = () => {
               </label>
               <div className="relative">
                 <input type={showPassword ? "text" : "password"} placeholder="Create a password" className={`input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 text-sm ${errors.password ? 'input-error bg-red-900/10' : ''}`} {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Password 6+ chars' } })} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}</button>
+                
+                {/* এই বাটনে z-10 যোগ করা হয়েছে */}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-4 flex items-center z-10 text-gray-400 hover:text-white cursor-pointer">{showPassword ? <FaEyeSlash size={18}/> : <FaEye size={18} />}</button>
+              
               </div>
               {errors.password && <span className='text-red-400 text-xs mt-1'>{errors.password.message}</span>}
             </div>
