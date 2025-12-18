@@ -150,7 +150,7 @@ const Navbar = () => {
                 <Link to='/dashboard' className='hover:text-teal-400 hover:bg-white/5'>Dashboard</Link>
               </li>
               <li>
-                <button onClick={handleLogOut} className='text-red-400 font-medium hover:bg-red-500/10 hover:text-red-500 mt-1'>Logout</button>
+                <button onClick={handleLogOut} className='text-red-400 pl-3 font-medium hover:bg-red-500/10 hover:text-red-500 mt-1'>Logout</button>
               </li>
             </ul>
           </div>
