@@ -26,6 +26,9 @@ import AdminRoute from './AdminRoute';
 import DecoratorRoute from './DecoratorRoute';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
+// লাইভ ব্যাকএন্ড ইউআরএল
+const BASE_URL = 'https://backend-delta-sable-65.vercel.app';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -38,7 +41,7 @@ export const router = createBrowserRouter([
         path: '/services/:id', 
         element: <ServiceDetails />,
         loader: async ({ params }) => {
-            const res = await fetch(`http://localhost:3000/services/${params.id}`);
+            const res = await fetch(`${BASE_URL}/services/${params.id}`);
             if (!res.ok) {
                 throw new Response("Not Found", { status: 404 });
             }
@@ -79,7 +82,7 @@ export const router = createBrowserRouter([
         {
             path: 'updateService/:id',
             element: <AdminRoute><UpdateService /></AdminRoute>,
-            loader: ({params}) => fetch(`http://localhost:3000/services/${params.id}`)
+            loader: ({params}) => fetch(`${BASE_URL}/services/${params.id}`)
         },
         {
             path: 'manageBookings',
