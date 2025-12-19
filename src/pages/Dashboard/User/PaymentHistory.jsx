@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import axios from 'axios';
 
 const PaymentHistory = () => {
     const { user } = useContext(AuthContext);
     const [payments, setPayments] = useState([]);
-    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         if(user?.email) {
-            axiosSecure.get(`/payments/${user.email}`)
+            axios.get(`https://backend-delta-sable-65.vercel.app/payments/${user.email}`, {
+                headers: { authorization: `Bearer ${localStorage.getItem('access-token')}` }
+            })
             .then(res => setPayments(res.data))
             .catch(err => console.error(err));
         }
-    }, [user, axiosSecure])
+    }, [user])
 
     return (
         <div className="w-full">

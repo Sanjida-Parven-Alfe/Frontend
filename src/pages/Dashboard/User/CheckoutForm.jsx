@@ -1,13 +1,12 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState, useContext } from "react";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import axios from "axios";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({ booking, price }) => {
     const stripe = useStripe();
     const elements = useElements();
-    const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext);
     const [cardError, setCardError] = useState('');
     const [clientSecret, setClientSecret] = useState('');
@@ -15,15 +14,18 @@ const CheckoutForm = ({ booking, price }) => {
     const [transactionId, setTransactionId] = useState('');
     const navigate = useNavigate();
 
+    // 1. Create Payment Intent on mount
     useEffect(() => {
         if (price > 0) {
-            axiosSecure.post('/create-payment-intent', { price })
-                .then(res => {
-                    setClientSecret(res.data.clientSecret);
-                })
-                .catch(err => console.error(err));
+            axios.post('https://backend-delta-sable-65.vercel.app/create-payment-intent', { price }, {
+                headers: { authorization: `Bearer ${localStorage.getItem('access-token')}` }
+            })
+            .then(res => {
+                setClientSecret(res.data.clientSecret);
+            })
+            .catch(err => console.error("Error creating intent:", err));
         }
-    }, [price, axiosSecure]);
+    }, [price]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,6 +35,7 @@ const CheckoutForm = ({ booking, price }) => {
         const card = elements.getElement(CardElement);
         if (card === null) return;
 
+        // 2. Create Payment Method
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card
@@ -46,6 +49,7 @@ const CheckoutForm = ({ booking, price }) => {
 
         setProcessing(true);
 
+        // 3. Confirm Payment
         const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
             clientSecret,
             {
@@ -68,6 +72,7 @@ const CheckoutForm = ({ booking, price }) => {
         if (paymentIntent.status === 'succeeded') {
             setTransactionId(paymentIntent.id);
 
+            // 4. Save Payment to Database
             const payment = {
                 email: user?.email,
                 transactionId: paymentIntent.id,
@@ -78,12 +83,20 @@ const CheckoutForm = ({ booking, price }) => {
                 status: 'service pending'
             }
 
-            const res = await axiosSecure.post('/payments', payment);
-            if (res.data.insertResult?.insertedId || res.data.updateResult?.modifiedCount > 0) {
-                alert("Payment Successful!");
+            axios.post('https://backend-delta-sable-65.vercel.app/payments', payment, {
+                headers: { authorization: `Bearer ${localStorage.getItem('access-token')}` }
+            })
+            .then(res => {
+                if (res.data.insertResult?.insertedId || res.data.paymentResult?.insertedId) {
+                    alert("Payment Successful!");
+                    setProcessing(false);
+                    navigate('/dashboard/paymentHistory');
+                }
+            })
+            .catch(err => {
+                console.error(err);
                 setProcessing(false);
-                navigate('/dashboard/paymentHistory');
-            }
+            })
         }
     }
 
