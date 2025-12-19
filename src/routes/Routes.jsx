@@ -26,7 +26,6 @@ import AdminRoute from './AdminRoute';
 import DecoratorRoute from './DecoratorRoute';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
-// লাইভ ব্যাকএন্ড ইউআরএল
 const BASE_URL = 'https://backend-delta-sable-65.vercel.app';
 
 export const router = createBrowserRouter([
