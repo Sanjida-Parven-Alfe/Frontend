@@ -1,20 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthProvider';
-import axios from 'axios';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const PaymentHistory = () => {
     const { user } = useContext(AuthContext);
     const [payments, setPayments] = useState([]);
+    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         if(user?.email) {
-            axios.get(`http://localhost:3000/payments/${user.email}`, {
-                headers: { authorization: `Bearer ${localStorage.getItem('access-token')}` }
-            })
+            axiosSecure.get(`/payments/${user.email}`)
             .then(res => setPayments(res.data))
             .catch(err => console.error(err));
         }
-    }, [user])
+    }, [user, axiosSecure])
 
     return (
         <div className="w-full">

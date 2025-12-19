@@ -40,10 +40,9 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
-            
             if (currentUser) {
                 const userInfo = { email: currentUser.email };
-                axios.post('http://localhost:3000/jwt', userInfo)
+                axios.post('https://backend-delta-sable-65.vercel.app/jwt', userInfo)
                     .then(res => {
                         if (res.data.token) {
                             localStorage.setItem('access-token', res.data.token);
@@ -55,20 +54,10 @@ const AuthProvider = ({ children }) => {
                 setLoading(false);
             }
         });
-        return () => {
-            return unsubscribe();
-        }
+        return () => unsubscribe();
     }, [])
 
-    const authInfo = {
-        user,
-        loading,
-        createUser,
-        signIn,
-        googleSignIn,
-        logOut,
-        updateUserProfile
-    }
+    const authInfo = { user, loading, createUser, signIn, googleSignIn, logOut, updateUserProfile }
 
     return (
         <AuthContext.Provider value={authInfo}>
