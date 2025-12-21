@@ -26,7 +26,6 @@ const ManageBookings = () => {
     });
 
     if (decoratorName) {
-      // Call API to update status and set decorator name
       axiosSecure.patch(`/bookings/${id}`, { decoratorName }).then((res) => {
         if (res.data.modifiedCount > 0) {
           refetch();
