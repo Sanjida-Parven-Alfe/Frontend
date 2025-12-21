@@ -13,7 +13,6 @@ const About = () => {
       </div>
 
       <div className="pt-32 pb-20 px-6 relative z-10">
-       
         <div className="text-center mb-20">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -33,7 +32,6 @@ const About = () => {
           </motion.p>
         </div>
 
-       
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -72,7 +70,6 @@ const About = () => {
               balance between functionality and aesthetics.
             </p>
 
-           
             <div className="grid grid-cols-2 gap-6 pt-6">
               <div className="glass-card p-4 rounded-xl border-l-4 border-brand-teal">
                 <h3 className="text-3xl font-bold text-white">
@@ -90,7 +87,6 @@ const About = () => {
           </motion.div>
         </div>
 
-      
         <div className="mb-24">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold">
@@ -142,7 +138,6 @@ const About = () => {
           </div>
         </div>
 
-    
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold">
