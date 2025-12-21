@@ -27,7 +27,7 @@ const AddService = () => {
       if (imgResponse.success) {
         const imgURL = imgResponse.data.display_url;
 
-        // 2. Prepare Data object
+  
         const newService = {
           service_name: data.name,
           cost: parseFloat(data.cost),
@@ -38,7 +38,7 @@ const AddService = () => {
           image: imgURL,
         };
 
-        // 3. Send to Database
+        
         const dbRes = await axiosSecure.post("/services", newService);
         if (dbRes.data.insertedId) {
           reset();
@@ -67,7 +67,7 @@ const AddService = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {/* Service Name */}
+       
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Service Name*</span>
@@ -80,7 +80,7 @@ const AddService = () => {
             />
           </div>
 
-          {/* Category */}
+         
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Category*</span>
@@ -101,7 +101,7 @@ const AddService = () => {
             </select>
           </div>
 
-          {/* Cost */}
+       
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Cost (BDT)*</span>
@@ -114,7 +114,7 @@ const AddService = () => {
             />
           </div>
 
-          {/* Unit */}
+         
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Unit*</span>
@@ -135,7 +135,7 @@ const AddService = () => {
             </select>
           </div>
 
-          {/* Description */}
+        
           <div className="form-control w-full md:col-span-2">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Description*</span>
@@ -147,7 +147,7 @@ const AddService = () => {
             ></textarea>
           </div>
 
-          {/* Image Upload */}
+        
           <div className="form-control w-full md:col-span-2">
             <label className="label">
               <span className="label-text pb-2 text-gray-300">Service Image*</span>
@@ -159,7 +159,7 @@ const AddService = () => {
             />
           </div>
 
-          {/* Submit Button */}
+          
           <div className="md:col-span-2 mt-4">
             <button className="btn bg-brand-teal hover:bg-teal-400 text-black border-none w-full font-bold text-lg flex items-center gap-2">
               Add Service <FaUpload />
