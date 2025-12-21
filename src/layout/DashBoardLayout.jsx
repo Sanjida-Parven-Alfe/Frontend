@@ -21,7 +21,7 @@ const DashboardLayout = () => {
   const [isAdmin] = useAdmin();
   const [isDecorator] = useDecorator();
 
-  // Logout Handler
+
   const handleLogout = () => {
     logOut()
       .then(() => {

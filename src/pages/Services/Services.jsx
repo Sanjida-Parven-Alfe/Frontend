@@ -1,148 +1,186 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaSearch } from 'react-icons/fa';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FaSearch } from "react-icons/fa";
+import axios from "axios";
 
 const Services = () => {
-    const [services, setServices] = useState([]);
-    const [searchText, setSearchText] = useState('');
-    const [filterType, setFilterType] = useState('All');
-    const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
-    const [loading, setLoading] = useState(true);
+  const [services, setServices] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [filterType, setFilterType] = useState("All");
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        axios.get('https://backend-delta-sable-65.vercel.app/services')
-            .then(res => {
-                setServices(res.data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-                setLoading(false);
-            })
-    }, []);
+  useEffect(() => {
+    axios
+      .get("https://backend-delta-sable-65.vercel.app/services")
+      .then((res) => {
+        setServices(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
-    const filteredServices = services.filter(service => {
-        const matchesSearch = service.service_name.toLowerCase().includes(searchText.toLowerCase());
-        const matchesType = filterType === 'All' || service.category === filterType;
-        const matchesPrice = service.cost >= priceRange.min && service.cost <= priceRange.max;
-        return matchesSearch && matchesType && matchesPrice;
-    });
+  const filteredServices = services.filter((service) => {
+    const matchesSearch = service.service_name
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+    const matchesType = filterType === "All" || service.category === filterType;
+    const matchesPrice =
+      service.cost >= priceRange.min && service.cost <= priceRange.max;
+    return matchesSearch && matchesType && matchesPrice;
+  });
 
-    const SkeletonCard = () => (
-        <div className="glass-card rounded-2xl overflow-hidden border border-white/5 bg-brand-dark/40 p-6 animate-pulse">
-            <div className="bg-gray-700 h-56 rounded-xl mb-4"></div>
-            <div className="h-6 bg-gray-700 rounded w-3/4 mb-2"></div>
-            <div className="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
-            <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
-                <div className="h-8 bg-gray-700 rounded w-20"></div>
-                <div className="h-8 bg-gray-700 rounded w-28"></div>
-            </div>
+  const SkeletonCard = () => (
+    <div className="glass-card rounded-2xl overflow-hidden border border-white/5 bg-brand-dark/40 p-6 animate-pulse">
+      <div className="bg-gray-700 h-56 rounded-xl mb-4"></div>
+      <div className="h-6 bg-gray-700 rounded w-3/4 mb-2"></div>
+      <div className="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
+      <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
+        <div className="h-8 bg-gray-700 rounded w-20"></div>
+        <div className="h-8 bg-gray-700 rounded w-28"></div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="pt-32 pb-10 px-6 relative z-10">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Explore Our <span className="text-brand-teal">Services</span>
+          </h1>
+          <p className="text-gray-400">
+            Find the perfect decoration package for your next event.
+          </p>
         </div>
-    );
 
-    return (
-        <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
-                <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
-                <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
+        <div className="max-w-6xl mx-auto glass-card p-8 rounded-2xl mb-12 border border-white/10 shadow-xl">
+          <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
+            <div className="w-full md:w-5/12">
+              <label className="text-xs text-gray-400 mb-2 block ml-1">
+                Search Service
+              </label>
+              <div className="relative">
+                <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="e.g. Wedding, Office..."
+                  className="w-full bg-black/30 border border-gray-600 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-brand-teal transition-colors text-white h-12"
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+              </div>
             </div>
 
-            <div className="pt-32 pb-10 px-6 relative z-10">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Explore Our <span className="text-brand-teal">Services</span></h1>
-                    <p className="text-gray-400">Find the perfect decoration package for your next event.</p>
-                </div>
-
-                <div className="max-w-6xl mx-auto glass-card p-8 rounded-2xl mb-12 border border-white/10 shadow-xl">
-                    <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
-                        <div className="w-full md:w-5/12">
-                            <label className="text-xs text-gray-400 mb-2 block ml-1">Search Service</label>
-                            <div className="relative">
-                                <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
-                                <input 
-                                    type="text" 
-                                    placeholder="e.g. Wedding, Office..." 
-                                    className="w-full bg-black/30 border border-gray-600 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-brand-teal transition-colors text-white h-12"
-                                    onChange={(e) => setSearchText(e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="w-full md:w-3/12">
-                            <label className="text-xs text-gray-400 mb-2 block ml-1">Filter by Category</label>
-                            <select 
-                                className="select select-bordered w-full rounded-xl bg-black/30 border-gray-600 focus:border-brand-teal text-white h-12 min-h-[48px]"
-                                onChange={(e) => setFilterType(e.target.value)}
-                            >
-                                <option value="All">All Categories</option>
-                                <option value="Corporate">Corporate</option>
-                                <option value="Wedding">Wedding</option>
-                                <option value="Home">Home Decor</option>
-                                <option value="Party">Party</option>
-                            </select>
-                        </div>
-
-                        <div className="w-full md:w-4/12">
-                            <label className="text-xs text-gray-400 mb-2 block ml-1">Budget Range (৳)</label>
-                            <div className="flex gap-3 items-center">
-                                <input 
-                                    type="number" placeholder="Min" 
-                                    className="input input-bordered w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
-                                    onChange={(e) => setPriceRange({...priceRange, min: Number(e.target.value) || 0})}
-                                />
-                                <span className="text-gray-400 font-bold">-</span>
-                                <input 
-                                    type="number" placeholder="Max" 
-                                    className="input input-bordered w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
-                                    onChange={(e) => setPriceRange({...priceRange, max: Number(e.target.value) || 50000})}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {loading ? (
-                        [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
-                    ) : filteredServices.length > 0 ? (
-                        filteredServices.map(service => (
-                            <motion.div 
-                                key={service._id}
-                                whileHover={{ y: -5 }}
-                                className="glass-card rounded-2xl overflow-hidden border border-white/5 shadow-lg hover:border-brand-teal/30 transition-all bg-brand-dark/40"
-                            >
-                                <figure className="h-56 overflow-hidden relative">
-                                    <img src={service.image} alt={service.service_name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                                    <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/10">
-                                        {service.category}
-                                    </span>
-                                </figure>
-                                <div className="p-6">
-                                    <h3 className="text-2xl font-bold mb-2">{service.service_name}</h3>
-                                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">{service.description}</p>
-                                    <div className="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
-                                        <span className="text-2xl font-bold text-brand-teal">৳{service.cost}</span>
-                                        <Link to={`/services/${service._id}`}>
-                                            <button className="btn btn-sm bg-white text-black hover:bg-brand-teal hover:text-black border-none rounded-full px-6 font-bold">
-                                                View Details
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))
-                    ) : (
-                        <div className="col-span-full text-center py-20 text-gray-500 text-xl glass-card rounded-2xl">
-                            No services found matching your criteria.
-                        </div>
-                    )}
-                </div>
+            <div className="w-full md:w-3/12">
+              <label className="text-xs text-gray-400 mb-2 block ml-1">
+                Filter by Category
+              </label>
+              <select
+                className="select select-bordered pl-4 w-full rounded-xl bg-black/30 border-gray-600 focus:border-brand-teal text-white h-12 min-h-[48px]"
+                onChange={(e) => setFilterType(e.target.value)}
+              >
+                <option value="All">All Categories</option>
+                <option value="Corporate">Corporate</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Home">Home Decor</option>
+                <option value="Party">Party</option>
+              </select>
             </div>
+
+            <div className="w-full md:w-4/12">
+              <label className="text-xs text-gray-400 mb-2 block ml-1">
+                Budget Range (৳)
+              </label>
+              <div className="flex gap-3 items-center">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Min"
+                  className="input input-bordered pl-4 w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
+                  onChange={(e) =>
+                    setPriceRange({
+                      ...priceRange,
+                      min: Number(e.target.value) || 0,
+                    })
+                  }
+                />
+                <span className="text-gray-400 font-bold">-</span>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Max"
+                  className="input input-bordered pl-4 w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
+                  onChange={(e) =>
+                    setPriceRange({
+                      ...priceRange,
+                      max: Number(e.target.value) || 50000,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
         </div>
-    );
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {loading ? (
+            [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
+          ) : filteredServices.length > 0 ? (
+            filteredServices.map((service) => (
+              <motion.div
+                key={service._id}
+                whileHover={{ y: -5 }}
+                className="glass-card rounded-2xl overflow-hidden border border-white/5 shadow-lg hover:border-brand-teal/30 transition-all bg-brand-dark/40"
+              >
+                <figure className="h-56 overflow-hidden relative">
+                  <img
+                    src={service.image}
+                    alt={service.service_name}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/10">
+                    {service.category}
+                  </span>
+                </figure>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-2">
+                    {service.service_name}
+                  </h3>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                    {service.description}
+                  </p>
+                  <div className="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
+                    <span className="text-2xl font-bold text-brand-teal">
+                      ৳{service.cost}
+                    </span>
+                    <Link to={`/services/${service._id}`}>
+                      <button className="btn btn-sm bg-white text-black hover:bg-brand-teal hover:text-black border-none rounded-full px-6 font-bold">
+                        View Details
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-20 text-gray-500 text-xl glass-card rounded-2xl">
+              No services found matching your criteria.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Services;
