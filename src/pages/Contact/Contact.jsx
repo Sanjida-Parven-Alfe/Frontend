@@ -31,7 +31,7 @@ const Contact = () => {
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Info & Form */}
+    
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="glass-card p-6 rounded-xl border border-white/5 flex flex-col items-center text-center hover:border-brand-teal/50 transition-colors">
@@ -52,7 +52,7 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Form */}
+           
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ const Contact = () => {
           </div>
 
           <div className="space-y-8">
-            {/* FAQ Section */}
+          
             <div>
               <h2 className="text-2xl font-bold mb-6 text-white pl-2 border-l-4 border-brand-red">
                 Frequently Asked Questions
@@ -147,7 +147,7 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Location Box */}
+       
             <div className="glass-card p-6 rounded-2xl border border-white/10 relative overflow-hidden h-64 flex items-center justify-center group">
               <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Dhaka_in_Bangladesh_%28Zoomed%29.svg/1200px-Dhaka_in_Bangladesh_%28Zoomed%29.svg.png')] bg-cover bg-center opacity-30 grayscale group-hover:grayscale-0 transition-all duration-700"></div>
               <div className="relative z-10 text-center">
