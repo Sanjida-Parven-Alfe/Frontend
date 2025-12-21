@@ -53,7 +53,6 @@ const Login = () => {
           image: result.user?.photoURL,
           role: "user",
         };
-        // Save to Database
         axios
           .post("https://backend-delta-sable-65.vercel.app/users", userInfo)
           .then(() => {
