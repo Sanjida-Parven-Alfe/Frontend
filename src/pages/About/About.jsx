@@ -13,7 +13,7 @@ const About = () => {
       </div>
 
       <div className="pt-32 pb-20 px-6 relative z-10">
-        {/* Header Section */}
+       
         <div className="text-center mb-20">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
@@ -33,7 +33,7 @@ const About = () => {
           </motion.p>
         </div>
 
-        {/* Story Section */}
+       
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
