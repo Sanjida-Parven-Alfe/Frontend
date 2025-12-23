@@ -87,3 +87,5 @@ The following environment variables are secured to prevent unauthorized access:
 Admin Email: admin@gmail.com
 
 Admin Password: Admin123!
+
+
