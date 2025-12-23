@@ -84,7 +84,6 @@ The following environment variables are secured to prevent unauthorized access:
    npm run dev
 
 ## 👨‍💼 Admin Credentials for Evaluation
-
 Admin Email: admin@gmail.com
 
 Admin Password: Admin123!
