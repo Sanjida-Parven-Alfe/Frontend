@@ -103,7 +103,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Logo & Brand Name */}
+        
         <Link to="/" className="flex items-center gap-2">
           <img
             src={logo}
