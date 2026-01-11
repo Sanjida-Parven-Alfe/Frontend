@@ -4,7 +4,6 @@
 
 @layer base {
   body {
-    /* Hardcoded bg-white text-black soriye deya hoyeche jate theme switch kaj kore */
     @apply transition-colors duration-300 min-h-screen bg-base-100 text-base-content;
   }
 }
@@ -15,7 +14,6 @@
   z-index: 1; 
 }
 
-/* Glass card design updated for both light and dark contrast */
 .glass-card {
   @apply backdrop-blur-md border;
   background: rgba(255, 255, 255, 0.05);
@@ -23,7 +21,6 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* Light mode e glass card arektu porishkar dekhabor jonno logic */
 [data-theme='light'] .glass-card {
   background: rgba(0, 0, 0, 0.02);
   border-color: rgba(0, 0, 0, 0.05);
@@ -34,12 +31,12 @@
   text-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
 }
 
-/* Skeleton loader style for global consistency */
+
 .skeleton {
   @apply bg-gray-300 dark:bg-gray-700 animate-pulse rounded-lg;
 }
 
-/* Scrollbar styling for a professional look */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
