@@ -27,21 +27,33 @@ const SignUp = () => {
   const onSubmit = async (data) => {
     let photoURL = "https://i.ibb.co/MC1xh5r/user-avatar.png";
 
+    // Show loading state
+    Swal.fire({
+      title: 'Creating Account...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     try {
+      // Image Upload Logic to ImgBB
       if (data.photo && data.photo.length > 0) {
-        const imageFile = { image: data.photo[0] };
-        const res = await axios.post(image_hosting_api, imageFile, {
-          headers: { "content-type": "multipart/form-data" },
-        });
+        const formData = new FormData();
+        formData.append("image", data.photo[0]);
+        const res = await axios.post(image_hosting_api, formData);
         if (res.data.success) {
           photoURL = res.data.data.display_url;
         }
       }
 
-      const result = await createUser(data.email, data.password);
+      // Create User in Firebase
+      await createUser(data.email, data.password);
 
+      // Update Profile
       await updateUserProfile(data.name, photoURL);
 
+      // Save User to Database
       const userInfo = {
         name: data.name,
         email: data.email,
@@ -67,7 +79,6 @@ const SignUp = () => {
           timer: 1500,
         });
         navigate("/");
-        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -198,7 +209,7 @@ const SignUp = () => {
                   required: "Email is required",
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: "Invalid email",
+                    message: "Please enter a valid email",
                   },
                 })}
               />
@@ -236,7 +247,14 @@ const SignUp = () => {
                   className="input input-bordered pl-2 w-full h-11 min-h-[44px] bg-white/5 border-white/10 focus:border-teal-400 text-white placeholder-gray-500 transition-all rounded-lg pr-12 text-sm"
                   {...register("password", {
                     required: "Password is required",
-                    minLength: { value: 6, message: "Password 6+ chars" },
+                    minLength: { 
+                      value: 6, 
+                      message: "Password must be at least 6 characters" 
+                    },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/,
+                      message: "Must include Uppercase, Lowercase and Number"
+                    }
                   })}
                 />
                 <button

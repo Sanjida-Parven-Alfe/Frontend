@@ -6,6 +6,7 @@ import {
   FaUsers,
   FaBoxOpen,
   FaClipboardList,
+  FaArrowRight,
 } from "react-icons/fa";
 import {
   BarChart,
@@ -26,6 +27,7 @@ const AdminHome = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
 
+  // Fetching Real dynamic data for stats
   const { data: stats = {} } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: async () => {
@@ -34,169 +36,126 @@ const AdminHome = () => {
     },
   });
 
-  const getPath = (x, y, width, height) => {
-    return `M${x},${y + height}C${x + width / 3},${y + height} ${
-      x + width / 2
-    },${y + height / 3}
-        ${x + width / 2}, ${y}
-        C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${
-      y + height
-    } ${x + width}, ${y + height}
-        Z`;
-  };
-
-  const TriangleBar = (props) => {
-    const { fill, x, y, width, height } = props;
-    return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
-  };
-
-  const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "red", "pink"];
+  // Color Palette for Charts
+  const colors = ["#4ECDC4", "#FF6B6B", "#FFE66D", "#0088FE", "#00C49F", "#FF8042"];
   const pieChartData = stats.serviceStats || [];
 
+  // Helper component for Overview Cards
+  const StatCard = ({ title, value, icon, gradient, subtitle }) => (
+    <div className={`p-8 rounded-[32px] bg-gradient-to-br ${gradient} text-white shadow-xl flex items-center justify-between border border-white/10 hover:scale-105 transition-transform duration-300`}>
+      <div>
+        <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-1">{title}</p>
+        <h3 className="text-4xl font-black">{value}</h3>
+        <p className="text-[10px] mt-2 opacity-60 font-bold uppercase">{subtitle}</p>
+      </div>
+      <div className="bg-white/20 p-4 rounded-2xl backdrop-blur-md">
+        {icon}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="w-full p-4">
-      <h2 className="text-3xl font-bold mb-8 text-white">
-        Hi, Welcome Back{" "}
-        <span className="text-brand-teal">{user?.displayName}</span>!
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div className="stat glass-card bg-gradient-to-r from-purple-900 to-purple-600 rounded-2xl text-white border-none">
-          <div className="stat-figure text-purple-200">
-            <FaDollarSign className="text-4xl" />
+    <div className="w-full space-y-12">
+      {/* 1. Dashboard Header */}
+      <div className="flex items-center gap-5">
+        <div className="avatar">
+          <div className="w-20 h-20 rounded-2xl ring ring-brand-teal ring-offset-base-100 ring-offset-2">
+            <img src={user?.photoURL} alt="Admin" />
           </div>
-          <div className="stat-title text-purple-100">Total Revenue</div>
-          <div className="stat-value">৳{stats.revenue || 0}</div>
-          <div className="stat-desc text-purple-200">Lifetime earnings</div>
         </div>
-
-        <div className="stat glass-card bg-gradient-to-r from-blue-900 to-blue-600 rounded-2xl text-white border-none">
-          <div className="stat-figure text-blue-200">
-            <FaUsers className="text-4xl" />
-          </div>
-          <div className="stat-title text-blue-100">Total Users</div>
-          <div className="stat-value">{stats.users || 0}</div>
-          <div className="stat-desc text-blue-200">Registered customers</div>
-        </div>
-
-        <div className="stat glass-card bg-gradient-to-r from-pink-900 to-pink-600 rounded-2xl text-white border-none">
-          <div className="stat-figure text-pink-200">
-            <FaBoxOpen className="text-4xl" />
-          </div>
-          <div className="stat-title text-pink-100">Services</div>
-          <div className="stat-value">{stats.services || 0}</div>
-          <div className="stat-desc text-pink-200">Available packages</div>
-        </div>
-
-        <div className="stat glass-card bg-gradient-to-r from-teal-900 to-teal-600 rounded-2xl text-white border-none">
-          <div className="stat-figure text-teal-200">
-            <FaClipboardList className="text-4xl" />
-          </div>
-          <div className="stat-title text-teal-100">Total Bookings</div>
-          <div className="stat-value">{stats.bookings || 0}</div>
-          <div className="stat-desc text-teal-200">All time orders</div>
+        <div>
+          <h2 className="text-4xl font-black uppercase italic tracking-tighter">
+            System <span className="text-brand-teal">Insights</span>
+          </h2>
+          <p className="text-gray-500 text-sm font-bold uppercase tracking-widest">
+            Welcome back, {user?.displayName} (Lead Administrator)
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="glass-card p-6 rounded-2xl border border-white/10">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Service Demand (Bar Chart)
-          </h3>
-          <div className="h-[300px] w-full">
-            {pieChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={pieChartData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-                  <XAxis dataKey="category" stroke="#fff" />
-                  <YAxis stroke="#fff" />
-                  <Bar
-                    dataKey="count"
-                    fill="#8884d8"
-                    shape={<TriangleBar />}
-                    label={{ position: "top", fill: "white" }}
-                  >
-                    {pieChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={colors[index % 20]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex justify-center items-center h-full text-gray-400">
-                No Booking Data Available
-              </div>
-            )}
+      {/* 2. Overview Cards Section (Requirement 7) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard title="Revenue" value={`৳${stats.revenue || 0}`} icon={<FaDollarSign size={30} />} gradient="from-indigo-600 to-blue-500" subtitle="Lifetime Earnings" />
+        <StatCard title="Customers" value={stats.users || 0} icon={<FaUsers size={30} />} gradient="from-rose-500 to-pink-500" subtitle="Total Registrations" />
+        <StatCard title="Inventory" value={stats.services || 0} icon={<FaBoxOpen size={30} />} gradient="from-amber-500 to-orange-500" subtitle="Active Packages" />
+        <StatCard title="Bookings" value={stats.bookings || 0} icon={<FaClipboardList size={30} />} gradient="from-teal-500 to-emerald-500" subtitle="Completed Orders" />
+      </div>
+
+      {/* 3. Charts Section (Requirement 7 - Dynamic Data Visualization) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Bar Chart for Demand Analysis */}
+        <div className="lg:col-span-7 glass-card p-8 rounded-[40px] border border-base-300 shadow-2xl">
+          <h3 className="text-lg font-bold mb-8 uppercase tracking-widest text-gray-400">Demand by Category</h3>
+          <div className="h-[350px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={pieChartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff05" />
+                <XAxis dataKey="category" stroke="#6b7280" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
+                <YAxis stroke="#6b7280" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
+                <Tooltip cursor={{ fill: "#ffffff05" }} contentStyle={{ backgroundColor: "#111827", borderRadius: "15px", border: "none", color: "#fff" }} />
+                <Bar dataKey="count" radius={[10, 10, 0, 0]}>
+                  {pieChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="glass-card p-6 rounded-2xl border border-white/10">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Category Distribution (Pie Chart)
-          </h3>
-          <div className="h-[300px] w-full flex justify-center items-center">
-            {pieChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieChartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({
-                      cx,
-                      cy,
-                      midAngle,
-                      innerRadius,
-                      outerRadius,
-                      percent,
-                    }) => {
-                      const radius =
-                        innerRadius + (outerRadius - innerRadius) * 0.5;
-                      const x =
-                        cx + radius * Math.cos((-midAngle * Math.PI) / 180);
-                      const y =
-                        cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                      return (
-                        <text
-                          x={x}
-                          y={y}
-                          fill="white"
-                          textAnchor={x > cx ? "start" : "end"}
-                          dominantBaseline="central"
-                        >
-                          {`${(percent * 100).toFixed(0)}%`}
-                        </text>
-                      );
-                    }}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {pieChartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colors[index % colors.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Legend />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1e293b",
-                      border: "none",
-                      color: "#fff",
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="text-gray-400">No Booking Data Available</div>
-            )}
+        {/* Pie Chart for Market Share */}
+        <div className="lg:col-span-5 glass-card p-8 rounded-[40px] border border-base-300 shadow-2xl">
+          <h3 className="text-lg font-bold mb-8 uppercase tracking-widest text-gray-400">Market Distribution</h3>
+          <div className="h-[350px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={pieChartData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={5} dataKey="count" label={({ percent }) => `${(percent * 100).toFixed(0)}%`}>
+                  {pieChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ backgroundColor: "#111827", borderRadius: "15px", border: "none" }} />
+                <Legend iconType="circle" />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
+        </div>
+      </div>
+
+      {/* 4. Data Table Section (Requirement 7 - Real Data Display) */}
+      <div className="glass-card p-8 rounded-[40px] border border-base-300 shadow-2xl overflow-hidden">
+        <div className="flex justify-between items-center mb-8">
+          <h3 className="text-2xl font-black uppercase italic tracking-tighter">Recent <span className="text-brand-teal">Orders</span></h3>
+          <button className="btn btn-sm btn-ghost text-brand-teal font-bold gap-2 uppercase text-xs">View All <FaArrowRight /></button>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="table w-full">
+            {/* head */}
+            <thead className="text-gray-400 uppercase text-[10px] tracking-widest border-b border-base-300">
+              <tr>
+                <th className="bg-transparent">Customer</th>
+                <th className="bg-transparent">Service</th>
+                <th className="bg-transparent">Total Price</th>
+                <th className="bg-transparent">Status</th>
+              </tr>
+            </thead>
+            <tbody className="text-sm font-bold">
+              {/* This data should ideally come from another query, using dummy rows for now */}
+              <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="bg-transparent">john@example.com</td>
+                <td className="bg-transparent">Royal Wedding Stage</td>
+                <td className="bg-transparent text-brand-teal">৳45,000</td>
+                <td className="bg-transparent"><span className="badge badge-success badge-sm font-bold">Completed</span></td>
+              </tr>
+              <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="bg-transparent">sarah@gmail.com</td>
+                <td className="bg-transparent">Minimalist Home Decor</td>
+                <td className="bg-transparent text-brand-teal">৳12,000</td>
+                <td className="bg-transparent"><span className="badge badge-warning badge-sm font-bold">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

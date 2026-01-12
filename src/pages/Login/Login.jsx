@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaUserShield, FaUserAlt } from "react-icons/fa"; // Added Icons
 import { FcGoogle } from "react-icons/fc";
 import logo from "../../assets/image/logo.png";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -19,8 +19,20 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue, // Added setValue to handle auto-fill
     formState: { errors },
   } = useForm();
+
+  // Function to handle Demo Login auto-fill
+  const handleDemoLogin = (role) => {
+    if (role === "admin") {
+      setValue("email", "admin@gmail.com");
+      setValue("password", "Admin123!");
+    } else {
+      setValue("email", "user@styledecor.com");
+      setValue("password", "123456");
+    }
+  };
 
   const onSubmit = (data) => {
     signIn(data.email, data.password)
@@ -113,6 +125,22 @@ const Login = () => {
             <p className="mt-2 text-gray-400 text-sm">
               Please enter your details to access your account.
             </p>
+          </div>
+
+          {/* --- Demo Login Buttons Added Here --- */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <button
+              onClick={() => handleDemoLogin("admin")}
+              className="btn btn-outline border-red-400 text-red-400 hover:bg-red-400 hover:text-white rounded-lg flex items-center gap-2"
+            >
+              <FaUserShield /> Admin
+            </button>
+            <button
+              onClick={() => handleDemoLogin("user")}
+              className="btn btn-outline border-teal-400 text-teal-400 hover:bg-teal-400 hover:text-white rounded-lg flex items-center gap-2"
+            >
+              <FaUserAlt /> User
+            </button>
           </div>
 
           <button

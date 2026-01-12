@@ -18,6 +18,7 @@ import MyBookings from '../pages/Dashboard/User/MyBookings';
 import UserHome from '../pages/Dashboard/User/UserHome';
 import Payment from '../pages/Dashboard/User/Payment';
 import PaymentHistory from '../pages/Dashboard/User/PaymentHistory';
+import Profile from '../pages/Dashboard/Shared/Profile'; // Import Profile
 import MyProjects from '../pages/Dashboard/Decorator/MyProjects';
 import DecoratorHome from '../pages/Dashboard/Decorator/DecoratorHome';
 import Earnings from '../pages/Dashboard/Decorator/Earnings'; 
@@ -25,6 +26,7 @@ import PrivateRoutes from './PrivateRoutes';
 import AdminRoute from './AdminRoute';
 import DecoratorRoute from './DecoratorRoute';
 import ErrorPage from '../pages/ErrorPage/ErrorPage';
+import Privacy from '../pages/Privacy/Privacy';
 
 const BASE_URL = 'https://backend-delta-sable-65.vercel.app';
 
@@ -39,18 +41,13 @@ export const router = createBrowserRouter([
       { 
         path: '/services/:id', 
         element: <ServiceDetails />,
-        loader: async ({ params }) => {
-            const res = await fetch(`${BASE_URL}/services/${params.id}`);
-            if (!res.ok) {
-                throw new Response("Not Found", { status: 404 });
-            }
-            return res.json();
-        }
+        loader: ({ params }) => fetch(`${BASE_URL}/services/${params.id}`).then(res => res.json())
       },
       { path: '/login', element: <Login /> },
       { path: '/signup', element: <SignUp /> },
       { path: '/about', element: <About /> },
       { path: '/contact', element: <Contact /> },
+      { path: '/privacy', element: <Privacy /> },
     ],
   },
   {
@@ -60,7 +57,11 @@ export const router = createBrowserRouter([
     children: [
         {
             index: true,
-            element: <Navigate to="/dashboard/userHome" replace />
+            element: <Navigate to="userHome" replace />
+        },
+        {
+            path: 'profile', // New Profile route
+            element: <Profile />
         },
         {
             path: 'adminHome',

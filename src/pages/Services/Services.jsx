@@ -1,186 +1,135 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaFilter, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query"; // Use React Query
 import axios from "axios";
 
 const Services = () => {
-  const [services, setServices] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [filterType, setFilterType] = useState("All");
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
-  const [loading, setLoading] = useState(true);
+    // 1. Fetch Data with TanStack Query
+    const { data: services = [], isLoading } = useQuery({
+        queryKey: ["services"],
+        queryFn: async () => {
+            const res = await axios.get("https://backend-delta-sable-65.vercel.app/services");
+            return res.data;
+        }
+    });
 
-  useEffect(() => {
-    axios
-      .get("https://backend-delta-sable-65.vercel.app/services")
-      .then((res) => {
-        setServices(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+    const [searchText, setSearchText] = useState("");
+    const [filterCategory, setFilterCategory] = useState("All");
+    const [sortOrder, setSortOrder] = useState("default");
+    const [priceRange, setPriceRange] = useState(100000);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
 
-  const filteredServices = services.filter((service) => {
-    const matchesSearch = service.service_name
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
-    const matchesType = filterType === "All" || service.category === filterType;
-    const matchesPrice =
-      service.cost >= priceRange.min && service.cost <= priceRange.max;
-    return matchesSearch && matchesType && matchesPrice;
-  });
+    // 2. Functional Filtering Logic
+    const filteredItems = services.filter((item) => {
+        const matchesSearch = item.service_name.toLowerCase().includes(searchText.toLowerCase());
+        const matchesCategory = filterCategory === "All" || item.category === filterCategory;
+        const matchesPrice = item.cost <= priceRange;
+        return matchesSearch && matchesCategory && matchesPrice;
+    });
 
-  const SkeletonCard = () => (
-    <div className="glass-card rounded-2xl overflow-hidden border border-white/5 bg-brand-dark/40 p-6 animate-pulse">
-      <div className="bg-gray-700 h-56 rounded-xl mb-4"></div>
-      <div className="h-6 bg-gray-700 rounded w-3/4 mb-2"></div>
-      <div className="h-4 bg-gray-700 rounded w-1/2 mb-4"></div>
-      <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
-        <div className="h-8 bg-gray-700 rounded w-20"></div>
-        <div className="h-8 bg-gray-700 rounded w-28"></div>
-      </div>
-    </div>
-  );
+    // 3. Sorting Logic
+    const sortedItems = [...filteredItems].sort((a, b) => {
+        if (sortOrder === "lowToHigh") return a.cost - b.cost;
+        if (sortOrder === "highToLow") return b.cost - a.cost;
+        return 0;
+    });
 
-  return (
-    <div className="bg-brand-dark min-h-screen text-white font-sans selection:bg-brand-red selection:text-white -mt-20">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-red rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-teal rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-brand-yellow rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-4000"></div>
-      </div>
+    // 4. Pagination Logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(sortedItems.length / itemsPerPage);
 
-      <div className="pt-32 pb-10 px-6 relative z-10">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Explore Our <span className="text-brand-teal">Services</span>
-          </h1>
-          <p className="text-gray-400">
-            Find the perfect decoration package for your next event.
-          </p>
-        </div>
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-        <div className="max-w-6xl mx-auto glass-card p-8 rounded-2xl mb-12 border border-white/10 shadow-xl">
-          <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
-            <div className="w-full md:w-5/12">
-              <label className="text-xs text-gray-400 mb-2 block ml-1">
-                Search Service
-              </label>
-              <div className="relative">
-                <FaSearch className="absolute left-4 top-3.5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="e.g. Wedding, Office..."
-                  className="w-full bg-black/30 border border-gray-600 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-brand-teal transition-colors text-white h-12"
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="w-full md:w-3/12">
-              <label className="text-xs text-gray-400 mb-2 block ml-1">
-                Filter by Category
-              </label>
-              <select
-                className="select select-bordered pl-4 w-full rounded-xl bg-black/30 border-gray-600 focus:border-brand-teal text-white h-12 min-h-[48px]"
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="All">All Categories</option>
-                <option value="Corporate">Corporate</option>
-                <option value="Wedding">Wedding</option>
-                <option value="Home">Home Decor</option>
-                <option value="Party">Party</option>
-              </select>
-            </div>
-
-            <div className="w-full md:w-4/12">
-              <label className="text-xs text-gray-400 mb-2 block ml-1">
-                Budget Range (৳)
-              </label>
-              <div className="flex gap-3 items-center">
-                <input
-                  type="number"
-                  min="0"
-                  placeholder="Min"
-                  className="input input-bordered pl-4 w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
-                  onChange={(e) =>
-                    setPriceRange({
-                      ...priceRange,
-                      min: Number(e.target.value) || 0,
-                    })
-                  }
-                />
-                <span className="text-gray-400 font-bold">-</span>
-                <input
-                  type="number"
-                  min="0"
-                  placeholder="Max"
-                  className="input input-bordered pl-4 w-full bg-black/30 border-gray-600 text-white rounded-xl h-12 min-h-[48px] px-3"
-                  onChange={(e) =>
-                    setPriceRange({
-                      ...priceRange,
-                      max: Number(e.target.value) || 50000,
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {loading ? (
-            [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
-          ) : filteredServices.length > 0 ? (
-            filteredServices.map((service) => (
-              <motion.div
-                key={service._id}
-                whileHover={{ y: -5 }}
-                className="glass-card rounded-2xl overflow-hidden border border-white/5 shadow-lg hover:border-brand-teal/30 transition-all bg-brand-dark/40"
-              >
-                <figure className="h-56 overflow-hidden relative">
-                  <img
-                    src={service.image}
-                    alt={service.service_name}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                  />
-                  <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/10">
-                    {service.category}
-                  </span>
-                </figure>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-2">
-                    {service.service_name}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                    {service.description}
-                  </p>
-                  <div className="flex justify-between items-center mt-4 border-t border-white/10 pt-4">
-                    <span className="text-2xl font-bold text-brand-teal">
-                      ৳{service.cost}
-                    </span>
-                    <Link to={`/services/${service._id}`}>
-                      <button className="btn btn-sm bg-white text-black hover:bg-brand-teal hover:text-black border-none rounded-full px-6 font-bold">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
+    return (
+        <div className="bg-base-100 min-h-screen py-24 px-6 font-sans">
+            <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-12">
+                    <h1 className="text-5xl font-black uppercase italic tracking-tighter mb-4">
+                        Explore <span className="text-brand-teal">Premium</span> Services
+                    </h1>
+                    <p className="text-gray-500">Discover top-rated decor for your next grand event.</p>
                 </div>
-              </motion.div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-20 text-gray-500 text-xl glass-card rounded-2xl">
-              No services found matching your criteria.
+
+                {/* Filters Section */}
+                <div className="glass-card p-8 rounded-[40px] mb-12 border border-base-300 shadow-2xl lg:flex lg:items-center lg:gap-6">
+                    <div className="flex-grow relative">
+                        <FaSearch className="absolute left-4 top-4 text-gray-400" />
+                        <input type="text" placeholder="Search by name..." className="input input-bordered w-full pl-12 rounded-2xl bg-base-200 border-none" onChange={(e) => setSearchText(e.target.value)} />
+                    </div>
+
+                    <div className="lg:w-48">
+                        <select className="select select-bordered w-full rounded-2xl bg-base-200 border-none" onChange={(e) => setFilterCategory(e.target.value)}>
+                            <option value="All">All Categories</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Parties">Parties</option>
+                        </select>
+                    </div>
+
+                    <div className="lg:w-60 px-4">
+                        <label className="text-[10px] font-black uppercase text-gray-400 flex justify-between">
+                            Max Price: <span className="text-brand-teal">৳{priceRange}</span>
+                        </label>
+                        <input type="range" min="0" max="100000" step="5000" value={priceRange} className="range range-teal range-xs mt-2" onChange={(e) => setPriceRange(e.target.value)} />
+                    </div>
+
+                    <div className="lg:w-48">
+                        <select className="select select-bordered w-full rounded-2xl bg-brand-teal text-black" onChange={(e) => setSortOrder(e.target.value)}>
+                            <option value="default">Sort By Price</option>
+                            <option value="lowToHigh">Low to High</option>
+                            <option value="highToLow">High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Grid Section */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 min-h-[400px]">
+                    {isLoading ? (
+                        [...Array(8)].map((_, i) => (
+                            <div key={i} className="glass-card rounded-[32px] p-6 animate-pulse border border-base-300 h-80 bg-gray-200"></div>
+                        ))
+                    ) : currentItems.length > 0 ? (
+                        currentItems.map((service) => (
+                            <motion.div key={service._id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card rounded-[32px] overflow-hidden border border-base-300 flex flex-col h-full hover:shadow-2xl transition-all">
+                                <div className="h-52 relative overflow-hidden">
+                                    <img src={service.image} className="w-full h-full object-cover" alt={service.service_name} />
+                                    <div className="absolute top-4 right-4 badge bg-brand-teal text-black font-bold">{service.category}</div>
+                                </div>
+                                <div className="p-6 flex flex-col flex-grow">
+                                    <h3 className="text-xl font-bold mb-2 truncate">{service.service_name}</h3>
+                                    <p className="text-sm text-gray-500 line-clamp-2 mb-6 flex-grow">{service.description}</p>
+                                    <div className="flex justify-between items-center pt-4 border-t border-base-200">
+                                        <span className="text-xl font-black text-brand-teal">৳{service.cost}</span>
+                                        <Link to={`/services/${service._id}`}>
+                                            <button className="btn w-20 btn-sm rounded-md bg-black text-white hover:bg-brand-teal hover:text-black">Details</button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <p className="col-span-full text-center py-20 opacity-50">No matching services found.</p>
+                    )}
+                </div>
+
+                {/* Pagination */}
+                <div className="flex justify-center mt-10 gap-2">
+                   {[...Array(totalPages)].map((_, i) => (
+                       <button key={i} onClick={() => paginate(i+1)} className={`btn btn-circle ${currentPage === i+1 ? 'btn-active' : ''}`}>{i+1}</button>
+                   ))}
+                </div>
             </div>
-          )}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Services;
