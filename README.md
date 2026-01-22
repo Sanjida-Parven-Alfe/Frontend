@@ -77,7 +77,7 @@ The following environment variables are secured to prevent unauthorized access:
    ```bash
    npm install
 
-3. Set up .env file: Create a `.env.local` file and add your Firebase credentials and Backend URL.
+3. Set up .env file: Create a `.env.local` file and add your Firebase credentials and Backend URL
    
 4. Run the project:
    ```bash
