@@ -62,7 +62,7 @@ The following environment variables are secured to prevent unauthorized access:
 
 ## 🗺️ UI & UX Highlights
 - **Modern Design:** Built with **Tailwind CSS** and **DaisyUI** for a clean, professional aesthetic.
-- **Responsiveness:** Fully optimized for Mobile, Tablet, and Desktop views.
+- **Responsiveness:** Fully optimized for Mobile, Tablet, and Desktop view.
 - **Feedback System:** Uses Toasts for success/error notifications and skeletons for smooth loading states.
 
 ---
