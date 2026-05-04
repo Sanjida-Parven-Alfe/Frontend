@@ -1,4 +1,4 @@
-# 🏠 StyleDecor - Smart Home & Ceremony Decoration System
+# 🏠 StyleDecor - Smart Home & Ceremony Decoration System.
 
 **StyleDecor** is a modern, full-stack appointment and service management system designed for a local decoration company. It bridges the gap between traditional walk-in consultations and modern online booking needs. Whether it's for a cozy home makeover or a grand wedding ceremony, StyleDecor provides a seamless workflow for users, decorators, and admins.
 
